@@ -146,7 +146,14 @@ export default function NuevaSesionPage() {
         </div>
 
         <div className="flex flex-col gap-1">
-          <label className="label-section">Clase <span style={{ color: 'var(--color-text-muted)', textTransform: 'none', fontSize: 11 }}>(opcional)</span></label>
+          <div className="flex items-center justify-between">
+            <label className="label-section">Clase <span style={{ color: 'var(--color-text-muted)', textTransform: 'none', fontSize: 11 }}>(opcional)</span></label>
+            {claseId && (
+              <button type="button" onClick={() => setClaseId('')} style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+                Quitar
+              </button>
+            )}
+          </div>
           {clases.length === 0 ? (
             <p style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>No tenés clases creadas.</p>
           ) : (
