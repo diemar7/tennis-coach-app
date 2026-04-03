@@ -22,7 +22,9 @@ const MESES = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'o
 function startOfWeek(date: Date): Date {
   const d = new Date(date)
   const day = d.getDay()
-  d.setDate(d.getDate() - day)
+  // Semana lunes a domingo (day 0 = domingo → retroceder 6, day 1 = lunes → retroceder 0, etc.)
+  const diff = day === 0 ? 6 : day - 1
+  d.setDate(d.getDate() - diff)
   d.setHours(0, 0, 0, 0)
   return d
 }
