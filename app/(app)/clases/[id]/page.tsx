@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
-import { Clase, Etapa, TipoEtapa } from '@/lib/types'
+import { Clase, Etapa, TipoEtapa, TecnicaTipo } from '@/lib/types'
 
 type EtapaForm = {
   id: string
@@ -11,6 +11,25 @@ type EtapaForm = {
   descripcion: string
   duracion_minutos: string
   esNueva?: boolean
+}
+
+const TECNICAS: { value: TecnicaTipo; label: string }[] = [
+  { value: 'drive', label: 'Drive' },
+  { value: 'reves', label: 'Revés' },
+  { value: 'saque', label: 'Saque' },
+  { value: 'volea', label: 'Volea' },
+  { value: 'smash', label: 'Smash' },
+  { value: 'globo', label: 'Globo' },
+  { value: 'slice', label: 'Slice' },
+  { value: 'drop', label: 'Drop' },
+  { value: 'fisico', label: 'Físico' },
+  { value: 'tactica', label: 'Táctica' },
+  { value: 'otro', label: 'Otro' },
+]
+
+const TECNICA_LABEL: Record<TecnicaTipo, string> = {
+  drive: 'Drive', reves: 'Revés', saque: 'Saque', volea: 'Volea', smash: 'Smash',
+  globo: 'Globo', slice: 'Slice', drop: 'Drop', fisico: 'Físico', tactica: 'Táctica', otro: 'Otro',
 }
 
 const TIPOS: { value: TipoEtapa; label: string }[] = [
@@ -46,6 +65,7 @@ export default function DetalleClasePage() {
   // Campos editables
   const [titulo, setTitulo] = useState('')
   const [objetivo, setObjetivo] = useState('')
+  const [tecnica, setTecnica] = useState<TecnicaTipo | null>(null)
   const [etapasForm, setEtapasForm] = useState<EtapaForm[]>([])
 
   useEffect(() => {
@@ -61,6 +81,7 @@ export default function DetalleClasePage() {
         setClase(data)
         setTitulo(data.titulo)
         setObjetivo(data.objetivo ?? '')
+        setTecnica(data.tecnica ?? null)
         const sorted = (data.etapas ?? []).sort((a: Etapa, b: Etapa) => a.orden - b.orden)
         setEtapas(sorted)
         setEtapasForm(sorted.map((e: Etapa) => ({
@@ -106,7 +127,7 @@ export default function DetalleClasePage() {
 
     await supabase
       .from('clases')
-      .update({ titulo: titulo.trim(), objetivo: objetivo.trim() || null })
+      .update({ titulo: titulo.trim(), objetivo: objetivo.trim() || null, tecnica: tecnica || null })
       .eq('id', clase.id)
 
     // Borrar todas las etapas y reinsertar
@@ -134,6 +155,7 @@ export default function DetalleClasePage() {
 
     if (data) {
       setClase(data)
+      setTecnica(data.tecnica ?? null)
       const sorted = (data.etapas ?? []).sort((a: Etapa, b: Etapa) => a.orden - b.orden)
       setEtapas(sorted)
       setEtapasForm(sorted.map((e: Etapa) => ({
@@ -174,10 +196,22 @@ export default function DetalleClasePage() {
 
       {!editando ? (
         <div className="flex flex-col gap-4">
-          {clase.objetivo && (
-            <div className="flex flex-col gap-1">
-              <p className="label-section">Objetivo</p>
-              <p style={{ fontSize: 13, color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>{clase.objetivo}</p>
+          {(clase.objetivo || clase.tecnica) && (
+            <div className="flex flex-col gap-3">
+              {clase.tecnica && (
+                <div className="flex flex-col gap-1">
+                  <p className="label-section">Técnica</p>
+                  <span className="badge" style={{ backgroundColor: 'var(--color-accent)', color: '#000', fontWeight: 600, alignSelf: 'flex-start' }}>
+                    {TECNICA_LABEL[clase.tecnica]}
+                  </span>
+                </div>
+              )}
+              {clase.objetivo && (
+                <div className="flex flex-col gap-1">
+                  <p className="label-section">Objetivo</p>
+                  <p style={{ fontSize: 13, color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>{clase.objetivo}</p>
+                </div>
+              )}
             </div>
           )}
 
@@ -210,6 +244,27 @@ export default function DetalleClasePage() {
           <div className="flex flex-col gap-1">
             <label className="label-section">Objetivo <span style={{ color: 'var(--color-text-muted)', textTransform: 'none', fontSize: 11 }}>(opcional)</span></label>
             <textarea className="input" value={objetivo} onChange={e => setObjetivo(e.target.value)} rows={2} style={{ resize: 'none' }} />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label className="label-section">Técnica <span style={{ color: 'var(--color-text-muted)', textTransform: 'none', fontSize: 11 }}>(opcional)</span></label>
+            <div className="flex flex-wrap gap-1.5">
+              {TECNICAS.map(({ value, label }) => (
+                <button
+                  key={value}
+                  type="button"
+                  onClick={() => setTecnica(tecnica === value ? null : value)}
+                  className="badge"
+                  style={{
+                    backgroundColor: tecnica === value ? 'var(--color-accent)' : 'var(--color-bg-surface)',
+                    color: tecnica === value ? '#000' : 'var(--color-text-muted)',
+                    fontWeight: tecnica === value ? 600 : 400,
+                  }}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="flex flex-col gap-2">

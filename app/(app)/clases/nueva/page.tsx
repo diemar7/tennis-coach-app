@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
-import { TipoEtapa } from '@/lib/types'
+import { TipoEtapa, TecnicaTipo } from '@/lib/types'
 
 type EtapaForm = {
   id: string // local, para el key
@@ -11,6 +11,20 @@ type EtapaForm = {
   descripcion: string
   duracion_minutos: string
 }
+
+const TECNICAS: { value: TecnicaTipo; label: string }[] = [
+  { value: 'drive', label: 'Drive' },
+  { value: 'reves', label: 'Revés' },
+  { value: 'saque', label: 'Saque' },
+  { value: 'volea', label: 'Volea' },
+  { value: 'smash', label: 'Smash' },
+  { value: 'globo', label: 'Globo' },
+  { value: 'slice', label: 'Slice' },
+  { value: 'drop', label: 'Drop' },
+  { value: 'fisico', label: 'Físico' },
+  { value: 'tactica', label: 'Táctica' },
+  { value: 'otro', label: 'Otro' },
+]
 
 const TIPOS: { value: TipoEtapa; label: string }[] = [
   { value: 'calentamiento', label: 'Calentamiento' },
@@ -34,6 +48,7 @@ export default function NuevaClasePage() {
   const router = useRouter()
   const [titulo, setTitulo] = useState('')
   const [objetivo, setObjetivo] = useState('')
+  const [tecnica, setTecnica] = useState<TecnicaTipo | null>(null)
   const [etapas, setEtapas] = useState<EtapaForm[]>([nuevaEtapa()])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -73,7 +88,7 @@ export default function NuevaClasePage() {
 
     const { data: clase, error: errClase } = await supabase
       .from('clases')
-      .insert({ coach_id: user.id, titulo: titulo.trim(), objetivo: objetivo.trim() || null })
+      .insert({ coach_id: user.id, titulo: titulo.trim(), objetivo: objetivo.trim() || null, tecnica: tecnica || null })
       .select()
       .single()
 
@@ -133,6 +148,27 @@ export default function NuevaClasePage() {
             rows={2}
             style={{ resize: 'none' }}
           />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="label-section">Técnica <span style={{ color: 'var(--color-text-muted)', textTransform: 'none', fontSize: 11 }}>(opcional)</span></label>
+          <div className="flex flex-wrap gap-1.5">
+            {TECNICAS.map(({ value, label }) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setTecnica(tecnica === value ? null : value)}
+                className="badge"
+                style={{
+                  backgroundColor: tecnica === value ? 'var(--color-accent)' : 'var(--color-bg-surface)',
+                  color: tecnica === value ? '#000' : 'var(--color-text-muted)',
+                  fontWeight: tecnica === value ? 600 : 400,
+                }}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* Etapas */}

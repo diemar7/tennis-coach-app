@@ -2,6 +2,7 @@ export type UserRole = 'coach' | 'admin'
 export type NivelAlumno = 'principiante' | 'intermedio' | 'avanzado'
 export type TipoEtapa = 'calentamiento' | 'drill' | 'juego' | 'fisico'
 export type AsistenciaTipo = 'presente' | 'ausente' | 'justificado'
+export type TecnicaTipo = 'drive' | 'reves' | 'saque' | 'volea' | 'smash' | 'globo' | 'slice' | 'drop' | 'fisico' | 'tactica' | 'otro'
 
 export interface Usuario {
   id: string
@@ -43,6 +44,7 @@ export interface Clase {
   coach_id: string
   titulo: string
   objetivo: string | null
+  tecnica: TecnicaTipo | null
   created_at: string
   etapas?: Etapa[]
 }

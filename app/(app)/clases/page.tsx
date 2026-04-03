@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
-import { Clase, Etapa } from '@/lib/types'
+import { Clase, Etapa, TecnicaTipo } from '@/lib/types'
 
 type ClaseConEtapas = Clase & { etapas: Etapa[] }
 
@@ -12,6 +12,11 @@ const TIPO_LABEL: Record<string, string> = {
   drill: 'Drill',
   juego: 'Juego',
   fisico: 'Físico',
+}
+
+const TECNICA_LABEL: Record<TecnicaTipo, string> = {
+  drive: 'Drive', reves: 'Revés', saque: 'Saque', volea: 'Volea', smash: 'Smash',
+  globo: 'Globo', slice: 'Slice', drop: 'Drop', fisico: 'Físico', tactica: 'Táctica', otro: 'Otro',
 }
 
 export default function ClasesPage() {
@@ -61,9 +66,16 @@ export default function ClasesPage() {
                 className="card text-left flex flex-col gap-2"
               >
                 <div className="flex items-start justify-between gap-2">
-                  <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--color-text-primary)' }}>
-                    {clase.titulo}
-                  </span>
+                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                    <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--color-text-primary)' }}>
+                      {clase.titulo}
+                    </span>
+                    {clase.tecnica && (
+                      <span className="badge" style={{ backgroundColor: 'var(--color-accent)', color: '#000', fontWeight: 600, flexShrink: 0 }}>
+                        {TECNICA_LABEL[clase.tecnica]}
+                      </span>
+                    )}
+                  </div>
                   <div className="flex items-center gap-2 shrink-0">
                     {duracionTotal > 0 && (
                       <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{duracionTotal} min</span>
