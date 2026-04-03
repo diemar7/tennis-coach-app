@@ -2,6 +2,7 @@ export type UserRole = 'coach' | 'admin'
 export type NivelAlumno = 'principiante' | 'intermedio' | 'avanzado'
 export type TipoEtapa = 'calentamiento' | 'drill' | 'juego' | 'fisico'
 export type AsistenciaTipo = 'presente' | 'ausente' | 'justificado'
+export type SesionEstado = 'pendiente' | 'finalizada' | 'cancelada'
 export type TecnicaTipo = 'drive' | 'reves' | 'saque' | 'volea' | 'smash' | 'globo' | 'slice' | 'drop' | 'fisico' | 'tactica' | 'otro'
 
 export interface Usuario {
@@ -62,8 +63,10 @@ export interface Sesion {
   id: string
   coach_id: string
   grupo_id: string
-  clase_id: string
+  clase_id: string | null
   fecha: string
+  hora: string | null
+  estado: SesionEstado
   notas: string | null
   created_at: string
   grupo?: Grupo
