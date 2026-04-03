@@ -50,6 +50,18 @@ export default function NuevaClasePage() {
     setEtapas(prev => prev.map(e => e.id === id ? { ...e, [field]: value } : e))
   }
 
+  function moverEtapa(id: string, direccion: 'arriba' | 'abajo') {
+    setEtapas(prev => {
+      const idx = prev.findIndex(e => e.id === id)
+      if (idx === -1) return prev
+      const next = [...prev]
+      const swap = direccion === 'arriba' ? idx - 1 : idx + 1
+      if (swap < 0 || swap >= next.length) return prev
+      ;[next[idx], next[swap]] = [next[swap], next[idx]]
+      return next
+    })
+  }
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     setError(null)
@@ -160,18 +172,39 @@ export default function NuevaClasePage() {
                   style={{ width: 60, textAlign: 'center', padding: '6px 8px' }}
                   min={1}
                 />
-                {etapas.length > 1 && (
+                {/* Botones reordenar */}
+                <div className="flex flex-col gap-0.5 shrink-0">
                   <button
                     type="button"
-                    onClick={() => eliminarEtapa(etapa.id)}
-                    style={{ color: 'var(--color-text-muted)', flexShrink: 0 }}
+                    onClick={() => moverEtapa(etapa.id, 'arriba')}
+                    disabled={idx === 0}
+                    style={{ color: idx === 0 ? 'var(--color-border)' : 'var(--color-text-muted)' }}
                   >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <line x1="18" y1="6" x2="6" y2="18" />
-                      <line x1="6" y1="6" x2="18" y2="18" />
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M18 15l-6-6-6 6" />
                     </svg>
                   </button>
-                )}
+                  <button
+                    type="button"
+                    onClick={() => moverEtapa(etapa.id, 'abajo')}
+                    disabled={idx === etapas.length - 1}
+                    style={{ color: idx === etapas.length - 1 ? 'var(--color-border)' : 'var(--color-text-muted)' }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M6 9l6 6 6-6" />
+                    </svg>
+                  </button>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => eliminarEtapa(etapa.id)}
+                  style={{ color: 'var(--color-text-muted)', flexShrink: 0 }}
+                >
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18" />
+                    <line x1="6" y1="6" x2="18" y2="18" />
+                  </svg>
+                </button>
               </div>
 
               {/* Descripción */}
