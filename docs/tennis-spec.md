@@ -33,14 +33,14 @@ Esta app apunta a un usuario distinto: el **profesor independiente que está en 
 | `coach` | Profe de tenis. Ve y gestiona solo sus propios datos. |
 | `admin` | Diego. Super usuario que puede ver los datos de todos los coaches. |
 
-Login con email y contraseña via Supabase Auth.
+Login con email o username via Supabase Auth.
 
 ---
 
 ## Entidades principales
 
 ### Usuario
-- Nombre, email
+- Nombre, email, username único
 - Rol: `coach` | `admin`
 
 ### Alumno (pertenece a un coach)
@@ -59,6 +59,7 @@ Login con email y contraseña via Supabase Auth.
 ### Clase — plantilla reutilizable (pertenece a un coach)
 - Título — ej: "Drive – Consistencia cruzada"
 - Objetivo (texto libre, opcional)
+- Técnica (opcional): `drive` | `reves` | `saque` | `volea` | `smash` | `globo` | `slice` | `drop` | `fisico` | `tactica` | `otro`
 - Etapas (ordenadas):
   - Tipo: `calentamiento` | `drill` | `juego` | `fisico`
   - Descripción (texto libre)
@@ -66,9 +67,10 @@ Login con email y contraseña via Supabase Auth.
   - Orden
 
 ### Sesión — el evento real
-- Fecha
+- Fecha y hora (hora opcional)
+- Estado: `pendiente` | `finalizada` | `cancelada`
 - Grupo (el grupo que realiza la clase)
-- Clase (la plantilla utilizada)
+- Clase (la plantilla utilizada, opcional — se puede asignar después)
 - Notas generales (opcional)
 - Registros por alumno
 
@@ -83,25 +85,26 @@ Vincula un alumno con una sesión específica. Contiene:
 ## Flujos principales
 
 ### Flujo 1 – Crear una clase (plantilla)
-1. El coach crea una clase con título, objetivo y etapas.
+1. El coach crea una clase con título, objetivo, técnica (opcional) y etapas.
 2. La clase queda guardada como plantilla reutilizable.
 
-### Flujo 2 – Iniciar una sesión
-1. El coach elige un grupo y le asigna una clase (plantilla).
-2. La sesión queda registrada con la fecha de hoy.
-3. El sistema precarga automáticamente todos los alumnos activos del grupo.
+### Flujo 2 – Crear una sesión
+1. El coach elige fecha, hora (opcional), grupo y clase (opcional).
+2. El sistema precarga automáticamente todos los alumnos activos del grupo con asistencia "presente".
+3. La sesión queda en estado "Pendiente".
 
 ### Flujo 3 – Registrar la sesión (durante o después de la clase)
 1. El coach abre la sesión del día.
-2. Ve el listado de alumnos del grupo.
-3. Para cada alumno marca asistencia.
+2. Ve el listado de alumnos del grupo, cada uno expandible con tap.
+3. Para cada alumno marca asistencia (presente / ausente / justificado).
 4. Para los que asistieron puede dejar nota numérica y/o comentarios.
-5. Puede agregar comentarios adicionales en cualquier momento.
+5. Al terminar cambia el estado a "Finalizada". Si no se dictó, puede marcarla "Cancelada".
+6. Puede agregar comentarios adicionales en cualquier momento.
 
 ### Flujo 4 – Ver ficha de un alumno
 1. El coach entra al perfil de un alumno.
 2. Ve su historial: todas las sesiones con asistencia, nota y comentarios.
-3. Puede ver su evolución en el tiempo.
+3. (Futuro) Puede ver su evolución por técnica.
 
 ### Flujo 5 – Gestionar alumnos
 1. Agregar alumno nuevo con nombre, nivel y grupo(s).
@@ -113,39 +116,37 @@ Vincula un alumno con una sesión específica. Contiene:
 ## Vistas necesarias
 
 ### 1. Sesiones (home)
-- Listado cronológico (más recientes primero).
-- Cada ítem: fecha, nombre de la clase, grupo, cantidad de asistentes.
+- Vista semanal navegable ←/→ por semana.
+- Sesiones agrupadas por día con badge de estado.
 - Botón para crear sesión nueva.
 
 ### 2. Detalle de sesión
-- Muestra fecha, clase utilizada, grupo.
-- Lista de alumnos con su registro: asistencia + nota + comentarios.
-- Permite editar los registros en cualquier momento.
+- Fecha, hora, grupo, clase (asignable/cambiable desde acá).
+- Estado cambiable con tap (Pendiente / Finalizada / Cancelada).
+- Lista de alumnos expandibles: asistencia, nota 1-10, comentarios cronológicos.
+- Todo se guarda al instante.
 
 ### 3. Clases (plantillas)
-- Listado de clases del coach.
-- Cada ítem: título, objetivo resumido, cantidad de etapas.
+- Listado de clases del coach con badge de técnica y duración total.
 - Botón para crear clase nueva.
 
 ### 4. Detalle / editar clase
-- Título, objetivo.
+- Título, objetivo, técnica.
 - Listado de etapas con tipo, descripción y duración.
-- Etapas reordenables.
+- Etapas reordenables con ↑↓.
 
 ### 5. Alumnos
-- Listado de alumnos activos.
-- Acceso rápido a la ficha de cada uno.
+- Listado de alumnos activos con badge de nivel.
+- Filtro activos/todos.
 - Botón para agregar alumno nuevo.
-- Opción de ver alumnos archivados.
 
 ### 6. Ficha de alumno
 - Datos del alumno (nombre, nivel, notas generales).
-- Historial de sesiones: fecha, clase, asistencia, nota, comentarios.
+- Historial de sesiones: fecha, clase, asistencia, nota, comentarios. *(pendiente)*
 
 ### 7. Grupos
-- Listado de grupos activos.
-- Detalle: nombre, alumnos que lo integran.
-- Botón para crear grupo nuevo.
+- Listado de grupos activos y archivados.
+- Detalle: nombre, alumnos que lo integran, editar, archivar/reactivar.
 
 ---
 
@@ -164,7 +165,7 @@ Vincula un alumno con una sesión específica. Contiene:
 
 - **Framework:** Next.js (App Router) + TypeScript
 - **Base de datos:** Supabase (PostgreSQL) — proyecto `vrdcjhdjctvkhadjqiao`
-- **Autenticación:** Supabase Auth (email + password)
+- **Autenticación:** Supabase Auth (email + password), login por username
 - **Estilos:** Tailwind CSS + CSS variables para theming
 - **Deploy:** Vercel
 
@@ -175,4 +176,5 @@ Vincula un alumno con una sesión específica. Contiene:
 - **Mobile first.** El coach registra desde el celular, en la cancha o justo después de la clase.
 - **Rapidez sobre completitud.** Registrar asistencia y dejar una nota en menos de 2 minutos.
 - **Sin fricción en el registro.** Los alumnos del grupo ya están precargados en cada sesión.
+- **Guardado instantáneo.** Sin botón "Guardar" general — cada cambio se persiste al instante.
 - **Dos temas visuales:** Polvo de ladrillo (arcilla) y Cancha azul (hard court). Ver `tennis-design.md`.

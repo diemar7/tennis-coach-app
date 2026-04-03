@@ -19,12 +19,14 @@
 4. `add_username_to_usuarios` — campo `username` único con índice
 5. `fix_user_trigger` — manejo explícito del enum `user_role`
 6. `fix_trigger_search_path` — `SET search_path = public` para resolver enums desde `supabase_auth_admin`
+7. `add_tecnica_to_clases` — enum `tecnica_tipo` + columna `tecnica` en `clases`
+8. `add_estado_hora_to_sesiones` — enum `sesion_estado` + columnas `hora` y `estado` en `sesiones`
 
 ### Usuarios creados
 | Username | Email | Rol | Password |
 |----------|-------|-----|----------|
 | diemar7 | diemar7@gmail.com | admin | Nano14 |
-| vane | pendiente (Diego la ve) | coach | pendiente |
+| vane | profetenisvanessa@gmail.com | coach | Vane123 |
 
 ---
 
@@ -44,7 +46,7 @@
 - Lista con badge de nivel (principiante / intermedio / avanzado) y filtro activos/todos
 - Crear alumno: nombre, apellido, nivel (selector visual), notas generales
 - Ficha: ver datos, editar inline, archivar/reactivar
-- **Probado:** Diego creó a Florencia Abreo y Diego Fleitas ✓, agregó un tercer alumno ✓
+- **Probado:** Diego creó alumnos de prueba ✓
 
 ### Grupos
 - Lista con activos y archivados separados
@@ -53,32 +55,31 @@
 - **Probado:** creó grupo, editó para agregar un alumno nuevo ✓
 
 ### Clases
-- Lista con badges de etapas y duración total sumada
-- Crear clase: título, objetivo, etapas con tipo/descripción/duración, botón "+ Agregar etapa"
-- Detalle: ver estructura con badges de color por tipo
-- Editar: modificar título/objetivo/etapas, reordenar etapas con botones ↑↓
+- Lista con badges de etapas, duración total sumada y badge de **técnica**
+- Crear clase: título, objetivo, **técnica** (opcional), etapas con tipo/descripción/duración
+- Detalle: ver estructura con badges de color por tipo, técnica destacada
+- Editar: modificar título/objetivo/técnica/etapas, reordenar etapas con botones ↑↓
 - **Probado:** creación y edición funcionando ✓
+
+### Sesiones ✅ (recién implementado)
+- **Lista semanal:** navegación ←/→ por semana, días agrupados, badge de estado
+- **Crear sesión:** fecha + hora (opcional), grupo (obligatorio), clase (opcional)
+  - Al crear se generan automáticamente los registros de todos los alumnos del grupo con asistencia "presente"
+- **Detalle de sesión:**
+  - Estado (Pendiente/Finalizada/Cancelada) — badge clickeable para cambiar
+  - Clase asignable/cambiable desde el detalle
+  - Cada alumno es una card expandible: asistencia (3 opciones), nota 1-10, comentarios cronológicos
+  - Todo se guarda al instante, sin botón "Guardar" general
 
 ---
 
 ## Pendiente 🔜
 
-### Sesiones (próximo paso)
-- Lista de sesiones (más recientes primero): fecha, clase, grupo, cantidad de asistentes
-- Crear sesión: elegir grupo + elegir clase plantilla → se precarga lista de alumnos del grupo
-- Detalle de sesión:
-  - Ver clase utilizada y grupo
-  - Marcar asistencia por alumno (presente / ausente / justificado)
-  - Nota 1-10 por alumno (opcional)
-  - Comentarios cronológicos por alumno (tabla separada, se pueden agregar varios)
-
 ### Ficha de alumno
-- Historial de sesiones con asistencia, nota y comentarios (placeholder hasta tener sesiones)
-
-### Usuario Vane
-- Crear cuando Diego tenga el mail
+- Historial de sesiones con asistencia, nota y comentarios
 
 ### Ideas futuras (fuera de v1)
+- Progreso por técnica por alumno (la base está: `tecnica` en clases + `nota` en registros)
 - Selector de tema (polvo de ladrillo / cancha azul)
 - PWA — installable en el celular
 - Historial visual de progresión por alumno

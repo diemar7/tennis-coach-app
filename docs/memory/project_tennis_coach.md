@@ -13,16 +13,22 @@ Supabase proyecto: `vrdcjhdjctvkhadjqiao`, org Baseline (`spgyrvqpaewcjyoqdmap`)
 **Why:** Cuenta separada porque la org anterior (Tias Locas) tenía 2 proyectos y el free tier solo permite 2 activos.
 
 **Usuarios creados:**
-- Diego: `diemar7@gmail.com`, username `diemar7`, rol `admin`
-- Vane (la profe): username `vane`, mail pendiente — Diego la ve el día siguiente
+- Diego: `diemar7@gmail.com`, username `diemar7`, rol `admin`, pass `Nano14`
+- Vane (la profe): `profetenisvanessa@gmail.com`, username `vane`, rol `coach`, pass `Vane123` — creada el 2026-04-03
 
 **Lo implementado:**
 - Login con username o email
 - Layout autenticado con bottom nav
 - Alumnos (lista, crear, ficha, editar, archivar)
 - Grupos (lista, crear con alumnos, detalle, editar, archivar)
-- Clases (lista con duración total, crear con etapas, detalle, editar, reordenar etapas ↑↓)
+- Clases (lista con duración total + badge de técnica, crear con etapas, detalle, editar, reordenar etapas ↑↓)
+  - Campo `tecnica` en clases: enum de 11 valores (drive, reves, saque, volea, smash, globo, slice, drop, fisico, tactica, otro), opcional
+- Sesiones (lista semanal navegable, crear, detalle con asistencia/nota/comentarios por alumno)
+  - Estado: pendiente | finalizada | cancelada
+  - Hora opcional
+  - Clase opcional, asignable/cambiable desde el detalle
+  - Registros de alumnos creados automáticamente al crear la sesión
 
-**Próximo paso:** Sesiones — crear (elegir grupo + clase), detalle con registro de asistencia + nota + comentarios por alumno, lista.
+**Próximo paso:** Historial de sesiones en ficha de alumno.
 
-**How to apply:** Al retomar, arrancar directamente con sesiones. Leer CLAUDE.md del proyecto para contexto completo.
+**How to apply:** Al retomar, leer CLAUDE.md del proyecto para contexto completo.

@@ -4,8 +4,8 @@
 
 App web para coaches de tenis independientes. Permite planificar clases, registrar asistencia y dejar notas por alumno en cada sesión.
 
-**Usuario principal:** la profe de tenis de Diego (username: `vane`, mail pendiente).
-**Diego** tiene rol `admin` — puede ver todos los datos de todos los coaches (username: `diemar7`, email: `diemar7@gmail.com`).
+**Usuario principal:** Vane (username: `vane`, email: `profetenisvanessa@gmail.com`, pass: `Vane123`).
+**Diego** tiene rol `admin` — puede ver todos los datos de todos los coaches (username: `diemar7`, email: `diemar7@gmail.com`, pass: `Nano14`).
 
 ---
 
@@ -36,13 +36,12 @@ App web para coaches de tenis independientes. Permite planificar clases, registr
 - Favicon pelota de tenis (SVG)
 - **Alumnos:** lista (filtro activos/todos), crear, ficha con edición y archivar/reactivar
 - **Grupos:** lista, crear con selección de alumnos, detalle con edición de nombre/alumnos y archivar
-- **Clases:** lista con duración total sumada, crear con etapas, detalle con edición y reordenamiento ↑↓ de etapas
+- **Clases:** lista con duración total + badge de técnica, crear con etapas y técnica, detalle con edición y reordenamiento ↑↓ de etapas
+- **Sesiones:** lista semanal navegable, crear (fecha+hora+grupo+clase opcionales), detalle con asistencia/nota/comentarios por alumno, cambio de estado (pendiente/finalizada/cancelada), asignación de clase desde el detalle
 - Trigger Supabase: al crear usuario en Auth se crea automáticamente en `public.usuarios`
 
 ### 🔜 Pendiente
-- **Sesiones:** crear (elegir grupo + clase), detalle con registro de asistencia + notas por alumno, lista
-- **Ficha de alumno:** historial de sesiones (placeholder hasta tener sesiones)
-- Usuario de Vane (falta el mail)
+- **Ficha de alumno:** historial de sesiones (asistencia, nota, comentarios por sesión)
 
 ---
 
@@ -52,17 +51,17 @@ App web para coaches de tenis independientes. Permite planificar clases, registr
 app/
   layout.tsx              — layout raíz, data-theme="polvo-de-ladrillo"
   page.tsx                — login (acepta username o email)
-  globals.css             — theming CSS variables, componentes base
+  globals.css             — theming CSS variables, componentes base (.badge-tecnica, etc)
   (app)/
     layout.tsx            — layout autenticado, chequea sesión, bottom nav
     clases/
-      page.tsx            — lista con duración total por clase
-      nueva/page.tsx      — crear clase con etapas reordenables
+      page.tsx            — lista con duración total y badge de técnica
+      nueva/page.tsx      — crear clase con etapas reordenables y selector de técnica
       [id]/page.tsx       — detalle/editar clase
     sesiones/
-      page.tsx            — placeholder
-      nueva/page.tsx      — TODO
-      [id]/page.tsx       — TODO
+      page.tsx            — lista semanal navegable ←/→
+      nueva/page.tsx      — crear sesión (fecha, hora, grupo, clase)
+      [id]/page.tsx       — detalle con asistencia/nota/comentarios por alumno
     alumnos/
       page.tsx            — lista con badge de nivel
       nuevo/page.tsx      — formulario crear alumno
@@ -83,14 +82,14 @@ public/
 ## Modelo de datos
 
 ```
-Usuario         → rol: 'coach' | 'admin', username único
-Alumno          → pertenece a coach, nivel: principiante|intermedio|avanzado, activo
-Grupo           → pertenece a coach, activo
-AlumnoGrupo     → pivot many-to-many alumno <-> grupo
-Clase           → plantilla reutilizable, pertenece a coach
-Etapa           → pasos de una clase: calentamiento|drill|juego|fisico, orden
-Sesion          → evento real: grupo + clase + fecha
-RegistroAlumno  → alumno en sesión: asistencia + nota 1-10
+Usuario            → rol: 'coach' | 'admin', username único
+Alumno             → pertenece a coach, nivel: principiante|intermedio|avanzado, activo
+Grupo              → pertenece a coach, activo
+AlumnoGrupo        → pivot many-to-many alumno <-> grupo
+Clase              → plantilla reutilizable, pertenece a coach, tecnica?: tecnica_tipo
+Etapa              → pasos de una clase: calentamiento|drill|juego|fisico, orden
+Sesion             → evento real: grupo + clase? + fecha + hora? + estado: pendiente|finalizada|cancelada
+RegistroAlumno     → alumno en sesión: asistencia + nota 1-10
 ComentarioRegistro → comentarios cronológicos por registro (tabla separada)
 ```
 
@@ -101,7 +100,7 @@ ComentarioRegistro → comentarios cronológicos por registro (tabla separada)
 Dos temas: **polvo-de-ladrillo** (default) y **cancha-azul**. Ambos usan `#ccff00` como color de acción (botón CTA).
 El tema se activa con `data-theme` en el `<html>`. Ver `docs/tennis-design.md` para la paleta completa.
 
-Clases CSS base definidas en `globals.css`: `.btn-primary`, `.btn-secondary`, `.card`, `.input`, `.label-section`, `.badge`, `.badge-calentamiento`, `.badge-drill`, `.badge-juego`, `.badge-fisico`
+Clases CSS base definidas en `globals.css`: `.btn-primary`, `.btn-secondary`, `.card`, `.input`, `.label-section`, `.badge`, `.badge-calentamiento`, `.badge-drill`, `.badge-juego`, `.badge-fisico`, `.badge-tecnica`
 
 ---
 
@@ -124,12 +123,15 @@ export function createClient() {
 ### Trigger de usuario
 Al crear un usuario en Supabase Auth, el trigger `on_auth_user_created` inserta automáticamente en `public.usuarios`. Requiere `SET search_path = public` para que resuelva el enum `user_role`.
 
+### Sesiones — registros automáticos
+Al crear una sesión, se insertan automáticamente registros en `registros_alumno` para todos los alumnos del grupo, con asistencia `presente` por defecto.
+
 ### Deploy
 ```bash
 git push origin main
 ```
 
-### Crear usuario nuevo (ej: Vane)
+### Crear usuario nuevo
 ```bash
 curl -X POST 'https://vrdcjhdjctvkhadjqiao.supabase.co/auth/v1/admin/users' \
   -H 'apikey: SERVICE_ROLE_KEY' \
@@ -139,7 +141,7 @@ curl -X POST 'https://vrdcjhdjctvkhadjqiao.supabase.co/auth/v1/admin/users' \
     "email": "EMAIL",
     "password": "PASSWORD",
     "email_confirm": true,
-    "user_metadata": { "nombre": "Vane", "username": "vane", "rol": "coach" }
+    "user_metadata": { "nombre": "NOMBRE", "username": "USERNAME", "rol": "coach" }
   }'
 ```
 
