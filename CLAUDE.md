@@ -145,5 +145,10 @@ curl -X POST 'https://vrdcjhdjctvkhadjqiao.supabase.co/auth/v1/admin/users' \
 
 ---
 
+## Contexto de sesión
+Al arrancar una sesión nueva, leer `docs/memory/CONTEXT.md` — apunta a todo lo necesario para retomar sin perder nada.
+
+---
+
 ## MCP disponibles
 - **Supabase MCP** — ejecutar SQL, migraciones, logs (cuenta Baseline)
