@@ -99,7 +99,7 @@ ComentarioRegistro → comentarios cronológicos por registro (tabla separada)
 ## Theming
 
 Dos temas: **polvo-de-ladrillo** (default) y **cancha-azul**. Ambos usan `#ccff00` como color de acción (botón CTA).
-El tema se activa con `data-theme` en el `<html>`. Ver `tennis-design.md` para la paleta completa.
+El tema se activa con `data-theme` en el `<html>`. Ver `docs/tennis-design.md` para la paleta completa.
 
 Clases CSS base definidas en `globals.css`: `.btn-primary`, `.btn-secondary`, `.card`, `.input`, `.label-section`, `.badge`, `.badge-calentamiento`, `.badge-drill`, `.badge-juego`, `.badge-fisico`
 
