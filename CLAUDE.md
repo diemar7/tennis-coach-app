@@ -98,8 +98,10 @@ export function createClient() {
 
 ### Deploy
 ```bash
-npx vercel --prod --force --yes
+git push origin main
 ```
+El repo está conectado a Vercel — cada push a `main` deployea automáticamente.
+**URL producción:** https://tennis-coach-app-seven.vercel.app
 
 ---
 
