@@ -158,12 +158,11 @@ export default function NuevaClasePage() {
                 key={value}
                 type="button"
                 onClick={() => setTecnica(tecnica === value ? null : value)}
-                className="badge"
-                style={{
-                  backgroundColor: tecnica === value ? 'var(--color-accent)' : 'var(--color-bg-surface)',
-                  color: tecnica === value ? '#000' : 'var(--color-text-muted)',
-                  fontWeight: tecnica === value ? 600 : 400,
-                }}
+                className={`badge ${tecnica === value ? 'badge-tecnica' : ''}`}
+                style={tecnica !== value ? {
+                  backgroundColor: 'var(--color-bg-surface)',
+                  color: 'var(--color-text-muted)',
+                } : {}}
               >
                 {label}
               </button>

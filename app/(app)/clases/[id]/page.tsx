@@ -201,7 +201,7 @@ export default function DetalleClasePage() {
               {clase.tecnica && (
                 <div className="flex flex-col gap-1">
                   <p className="label-section">Técnica</p>
-                  <span className="badge" style={{ backgroundColor: 'var(--color-accent)', color: '#000', fontWeight: 600, alignSelf: 'flex-start' }}>
+                  <span className="badge badge-tecnica" style={{ alignSelf: 'flex-start' }}>
                     {TECNICA_LABEL[clase.tecnica]}
                   </span>
                 </div>
@@ -254,12 +254,11 @@ export default function DetalleClasePage() {
                   key={value}
                   type="button"
                   onClick={() => setTecnica(tecnica === value ? null : value)}
-                  className="badge"
-                  style={{
-                    backgroundColor: tecnica === value ? 'var(--color-accent)' : 'var(--color-bg-surface)',
-                    color: tecnica === value ? '#000' : 'var(--color-text-muted)',
-                    fontWeight: tecnica === value ? 600 : 400,
-                  }}
+                  className={`badge ${tecnica === value ? 'badge-tecnica' : ''}`}
+                  style={tecnica !== value ? {
+                    backgroundColor: 'var(--color-bg-surface)',
+                    color: 'var(--color-text-muted)',
+                  } : {}}
                 >
                   {label}
                 </button>

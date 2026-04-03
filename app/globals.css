@@ -156,3 +156,8 @@ body {
   background-color: var(--badge-fisico-bg);
   color: var(--badge-fisico-text);
 }
+.badge-tecnica {
+  background-color: rgba(204, 255, 0, 0.15);
+  color: var(--color-action-text);
+  border: 1px solid rgba(204, 255, 0, 0.6);
+}

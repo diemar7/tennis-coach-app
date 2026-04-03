@@ -71,7 +71,7 @@ export default function ClasesPage() {
                       {clase.titulo}
                     </span>
                     {clase.tecnica && (
-                      <span className="badge" style={{ backgroundColor: 'var(--color-accent)', color: '#000', fontWeight: 600, flexShrink: 0 }}>
+                      <span className="badge badge-tecnica" style={{ flexShrink: 0 }}>
                         {TECNICA_LABEL[clase.tecnica]}
                       </span>
                     )}
