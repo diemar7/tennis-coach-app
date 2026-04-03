@@ -53,6 +53,7 @@ export default function ClasesPage() {
         <div className="flex flex-col gap-2">
           {clases.map(clase => {
             const etapas = (clase.etapas ?? []).sort((a, b) => a.orden - b.orden)
+            const duracionTotal = etapas.reduce((sum, e) => sum + (e.duracion_minutos ?? 0), 0)
             return (
               <button
                 key={clase.id}
@@ -63,9 +64,14 @@ export default function ClasesPage() {
                   <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--color-text-primary)' }}>
                     {clase.titulo}
                   </span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-text-muted)', flexShrink: 0, marginTop: 2 }}>
-                    <path d="M9 18l6-6-6-6" />
-                  </svg>
+                  <div className="flex items-center gap-2 shrink-0">
+                    {duracionTotal > 0 && (
+                      <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>{duracionTotal} min</span>
+                    )}
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--color-text-muted)' }}>
+                      <path d="M9 18l6-6-6-6" />
+                    </svg>
+                  </div>
                 </div>
 
                 {clase.objetivo && (
