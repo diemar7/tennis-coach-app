@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
+import Image from 'next/image'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -50,7 +51,9 @@ export default function LoginPage() {
     <div className="min-h-dvh flex flex-col items-center justify-center px-5" style={{ backgroundColor: 'var(--color-bg-app)' }}>
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
-          <div className="text-4xl mb-3">🎾</div>
+          <div className="flex justify-center mb-3">
+            <Image src="/logo.png" alt="Tennis Coach" width={80} height={80} style={{ borderRadius: 18 }} />
+          </div>
           <h1 className="text-xl font-semibold" style={{ color: 'var(--color-text-primary)' }}>
             Tennis Coach
           </h1>
