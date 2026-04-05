@@ -4,6 +4,15 @@ import { useEffect, useState } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 
+function IconPerfil() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+    </svg>
+  )
+}
+
 const NAV_ITEMS = [
   { href: '/sesiones', label: 'Sesiones', icon: IconSesiones },
   { href: '/clases', label: 'Clases', icon: IconClases },
@@ -35,10 +44,31 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     )
   }
 
+  const perfilActive = pathname === '/perfil'
+
   return (
     <div className="min-h-dvh flex flex-col" style={{ backgroundColor: 'var(--color-bg-app)' }}>
+      {/* Header */}
+      <header
+        className="fixed top-0 left-0 right-0 flex items-center justify-end"
+        style={{
+          backgroundColor: 'var(--color-bg-app)',
+          borderBottom: '0.5px solid var(--color-border)',
+          height: 48,
+          paddingRight: 16,
+          zIndex: 10,
+        }}
+      >
+        <button
+          onClick={() => router.push('/perfil')}
+          style={{ color: perfilActive ? 'var(--color-primary)' : 'var(--color-text-muted)' }}
+        >
+          <IconPerfil />
+        </button>
+      </header>
+
       {/* Contenido principal */}
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main className="flex-1 overflow-y-auto pb-20 pt-12">
         {children}
       </main>
 
