@@ -3,7 +3,27 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
-import { Grupo, Alumno } from '@/lib/types'
+import { Grupo, Alumno, TecnicaTipo, SesionEstado } from '@/lib/types'
+
+const TECNICA_LABEL: Record<TecnicaTipo, string> = {
+  drive: 'Drive', reves: 'Revés', saque: 'Saque', volea: 'Volea',
+  smash: 'Smash', globo: 'Globo', slice: 'Slice', drop: 'Drop',
+  fisico: 'Físico', tactica: 'Táctica', otro: 'Otro',
+}
+
+const ESTADO_STYLE: Record<SesionEstado, { bg: string; color: string }> = {
+  pendiente:  { bg: '#fff8e1', color: '#f57f17' },
+  finalizada: { bg: '#e8f5e9', color: '#2e7d32' },
+  cancelada:  { bg: '#fce4ec', color: '#c62828' },
+}
+
+interface SesionHistorial {
+  id: string
+  fecha: string
+  hora: string | null
+  estado: SesionEstado
+  clase: { titulo: string; tecnica: TecnicaTipo | null } | null
+}
 
 export default function DetalleGrupoPage() {
   const router = useRouter()
@@ -11,9 +31,11 @@ export default function DetalleGrupoPage() {
   const [grupo, setGrupo] = useState<Grupo | null>(null)
   const [miembros, setMiembros] = useState<Alumno[]>([])
   const [todosAlumnos, setTodosAlumnos] = useState<Alumno[]>([])
+  const [sesiones, setSesiones] = useState<SesionHistorial[]>([])
   const [loading, setLoading] = useState(true)
   const [editando, setEditando] = useState(false)
   const [guardando, setGuardando] = useState(false)
+  const [filtroTecnica, setFiltroTecnica] = useState<TecnicaTipo | ''>('')
 
   // Campos editables
   const [nombre, setNombre] = useState('')
@@ -24,10 +46,15 @@ export default function DetalleGrupoPage() {
     async function load() {
       const supabase = createClient()
 
-      const [{ data: grupoData }, { data: miembrosData }, { data: alumnosData }] = await Promise.all([
+      const [{ data: grupoData }, { data: miembrosData }, { data: alumnosData }, { data: sesionesData }] = await Promise.all([
         supabase.from('grupos').select('*').eq('id', params.id).single(),
         supabase.from('alumno_grupo').select('alumno_id').eq('grupo_id', params.id),
         supabase.from('alumnos').select('*').eq('activo', true).order('apellido'),
+        supabase
+          .from('sesiones')
+          .select('id, fecha, hora, estado, clase:clases(titulo, tecnica)')
+          .eq('grupo_id', params.id)
+          .order('fecha', { ascending: false }),
       ])
 
       if (grupoData) {
@@ -42,6 +69,8 @@ export default function DetalleGrupoPage() {
       const todos = alumnosData ?? []
       setTodosAlumnos(todos)
       setMiembros(todos.filter(a => ids.has(a.id)))
+
+      setSesiones((sesionesData ?? []) as unknown as SesionHistorial[])
       setLoading(false)
     }
     load()
@@ -65,7 +94,6 @@ export default function DetalleGrupoPage() {
       .update({ nombre: nombre.trim(), descripcion: descripcion.trim() || null })
       .eq('id', grupo.id)
 
-    // Sincronizar alumnos: borrar todos y reinsertar los seleccionados
     await supabase.from('alumno_grupo').delete().eq('grupo_id', grupo.id)
     if (seleccionados.size > 0) {
       await supabase.from('alumno_grupo').insert(
@@ -85,6 +113,14 @@ export default function DetalleGrupoPage() {
     await supabase.from('grupos').update({ activo: !grupo.activo }).eq('id', grupo.id)
     setGrupo({ ...grupo, activo: !grupo.activo })
   }
+
+  const sesionesFiltradas = filtroTecnica
+    ? sesiones.filter(s => s.clase?.tecnica === filtroTecnica)
+    : sesiones
+
+  const tecnicasUsadas = Array.from(
+    new Set(sesiones.map(s => s.clase?.tecnica).filter(Boolean) as TecnicaTipo[])
+  )
 
   if (loading) return <div className="px-4 pt-6"><p style={{ color: 'var(--color-text-muted)', fontSize: 14 }}>Cargando...</p></div>
   if (!grupo) return <div className="px-4 pt-6"><p style={{ color: 'var(--color-text-muted)', fontSize: 14 }}>Grupo no encontrado.</p></div>
@@ -116,6 +152,7 @@ export default function DetalleGrupoPage() {
             <p style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>{grupo.descripcion}</p>
           )}
 
+          {/* Alumnos */}
           <div>
             <p className="label-section mb-2">Alumnos ({miembros.length})</p>
             {miembros.length === 0 ? (
@@ -136,6 +173,86 @@ export default function DetalleGrupoPage() {
                     </svg>
                   </button>
                 ))}
+              </div>
+            )}
+          </div>
+
+          {/* Historial de sesiones */}
+          <div>
+            <p className="label-section mb-3">Historial de sesiones</p>
+
+            {tecnicasUsadas.length > 0 && (
+              <div className="mb-3">
+                <select
+                  className="input"
+                  value={filtroTecnica}
+                  onChange={e => setFiltroTecnica(e.target.value as TecnicaTipo | '')}
+                  style={{ fontSize: 13 }}
+                >
+                  <option value="">Todas las técnicas</option>
+                  {tecnicasUsadas.map(t => (
+                    <option key={t} value={t}>{TECNICA_LABEL[t]}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+
+            {filtroTecnica && (
+              <div className="mb-3 card" style={{ padding: '12px', textAlign: 'center' }}>
+                <div style={{ fontSize: 28, fontWeight: 700, color: 'var(--color-primary)', lineHeight: 1 }}>
+                  {sesionesFiltradas.length}
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--color-text-muted)', marginTop: 4 }}>
+                  {sesionesFiltradas.length === 1 ? 'sesión' : 'sesiones'} de {TECNICA_LABEL[filtroTecnica].toLowerCase()}
+                </div>
+              </div>
+            )}
+
+            {sesionesFiltradas.length === 0 ? (
+              <p style={{ fontSize: 13, color: 'var(--color-text-muted)' }}>
+                {filtroTecnica ? 'No hay sesiones con esa técnica.' : 'Todavía no hay sesiones registradas.'}
+              </p>
+            ) : (
+              <div className="flex flex-col gap-2">
+                {sesionesFiltradas.map(s => {
+                  const fecha = new Date(s.fecha + 'T12:00:00').toLocaleDateString('es-UY', {
+                    weekday: 'short', day: 'numeric', month: 'short',
+                  })
+                  return (
+                    <button
+                      key={s.id}
+                      className="card text-left"
+                      style={{ padding: '12px' }}
+                      onClick={() => router.push(`/sesiones/${s.id}`)}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="flex flex-col gap-1" style={{ flex: 1 }}>
+                          <div style={{ fontSize: 13, fontWeight: 500, color: 'var(--color-text-primary)', textTransform: 'capitalize' }}>
+                            {fecha}
+                          </div>
+                          {s.clase && (
+                            <div style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>
+                              {s.clase.titulo}
+                            </div>
+                          )}
+                          {s.clase?.tecnica && (
+                            <span className="badge-tecnica" style={{ alignSelf: 'flex-start', marginTop: 2 }}>
+                              {TECNICA_LABEL[s.clase.tecnica]}
+                            </span>
+                          )}
+                        </div>
+                        <span className="badge" style={{
+                          backgroundColor: ESTADO_STYLE[s.estado].bg,
+                          color: ESTADO_STYLE[s.estado].color,
+                          fontSize: 11,
+                          flexShrink: 0,
+                        }}>
+                          {s.estado.charAt(0).toUpperCase() + s.estado.slice(1)}
+                        </span>
+                      </div>
+                    </button>
+                  )
+                })}
               </div>
             )}
           </div>
