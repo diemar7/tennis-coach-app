@@ -63,6 +63,39 @@ export default function DetalleSesionPage() {
     setSesion(s)
     setClases(cs ?? [])
 
+    // Si la sesión es pendiente, sincronizar alumnos del grupo
+    if (s.estado === 'pendiente') {
+      const { data: alumnosGrupo } = await supabase
+        .from('alumno_grupo')
+        .select('alumno_id')
+        .eq('grupo_id', s.grupo_id)
+
+      const { data: registrosActuales } = await supabase
+        .from('registros_alumno')
+        .select('id, alumno_id, nota, comentarios:comentarios_registro(id)')
+        .eq('sesion_id', params.id)
+
+      const idsGrupo = new Set((alumnosGrupo ?? []).map((a: { alumno_id: string }) => a.alumno_id))
+      const regsActuales = registrosActuales ?? []
+
+      // Agregar los que faltan
+      const idsConRegistro = new Set(regsActuales.map((r: { alumno_id: string }) => r.alumno_id))
+      const faltantes = [...idsGrupo].filter(id => !idsConRegistro.has(id))
+      if (faltantes.length > 0) {
+        await supabase.from('registros_alumno').insert(
+          faltantes.map(alumno_id => ({ sesion_id: params.id, alumno_id, asistencia: 'presente' }))
+        )
+      }
+
+      // Eliminar los que ya no están en el grupo, solo si no tienen nota ni comentarios
+      const sobran = regsActuales.filter((r: { alumno_id: string; nota: number | null; comentarios: { id: string }[] }) =>
+        !idsGrupo.has(r.alumno_id) && r.nota === null && r.comentarios.length === 0
+      )
+      if (sobran.length > 0) {
+        await supabase.from('registros_alumno').delete().in('id', sobran.map((r: { id: string }) => r.id))
+      }
+    }
+
     const { data: regs } = await supabase
       .from('registros_alumno')
       .select('*, alumno:alumnos(id, nombre, apellido), comentarios:comentarios_registro(*)')
