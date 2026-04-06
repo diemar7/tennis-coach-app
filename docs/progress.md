@@ -27,6 +27,7 @@
 |----------|-------|-----|----------|
 | diemar7 | diemar7@gmail.com | admin | Nano14 |
 | vane | profetenisvanessa@gmail.com | coach | Vane123 |
+| sofi | s.aishemberg@gmail.com | coach | Sofi123 |
 
 ---
 
@@ -61,7 +62,12 @@
 - Editar: modificar título/objetivo/técnica/etapas, reordenar etapas con botones ↑↓
 - **Probado:** creación y edición funcionando ✓
 
-### Sesiones ✅ (recién implementado)
+### Perfil de usuario ✅
+- Header fijo con ícono de perfil en esquina superior derecha
+- Página `/perfil`: editar nombre y username, cambiar contraseña, cerrar sesión
+- Logo (`logo.png`) como favicon y en pantalla de login
+
+### Sesiones ✅
 - **Lista semanal:** navegación ←/→ por semana, días agrupados, badge de estado
 - **Crear sesión:** fecha + hora (opcional), grupo (obligatorio), clase (opcional)
   - Al crear se generan automáticamente los registros de todos los alumnos del grupo con asistencia "presente"

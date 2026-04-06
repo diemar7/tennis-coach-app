@@ -4,7 +4,10 @@
 
 App web para coaches de tenis independientes. Permite planificar clases, registrar asistencia y dejar notas por alumno en cada sesión.
 
-**Usuario principal:** Vane (username: `vane`, email: `profetenisvanessa@gmail.com`, pass: `Vane123`).
+**Coaches activas:**
+- Vane: username `vane`, email `profetenisvanessa@gmail.com`, pass `Vane123`
+- Sofía: username `sofi`, email `s.aishemberg@gmail.com`, pass `Sofi123`
+
 **Diego** tiene rol `admin` — puede ver todos los datos de todos los coaches (username: `diemar7`, email: `diemar7@gmail.com`, pass: `Nano14`).
 
 ---
@@ -33,11 +36,13 @@ App web para coaches de tenis independientes. Permite planificar clases, registr
 ### ✅ Completado
 - Login con email o username
 - Layout autenticado con bottom navigation (Sesiones / Clases / Alumnos / Grupos)
-- Favicon pelota de tenis (SVG)
+- Header fijo con ícono de perfil (esquina superior derecha)
+- Logo (`public/logo.png`) como favicon y en pantalla de login
+- **Perfil:** editar nombre y username, cambiar contraseña, cerrar sesión
 - **Alumnos:** lista (filtro activos/todos), crear, ficha con edición y archivar/reactivar
 - **Grupos:** lista, crear con selección de alumnos, detalle con edición de nombre/alumnos y archivar
 - **Clases:** lista con duración total + badge de técnica, crear con etapas y técnica, detalle con edición y reordenamiento ↑↓ de etapas
-- **Sesiones:** lista semanal navegable, crear (fecha+hora+grupo+clase opcionales), detalle con asistencia/nota/comentarios por alumno, cambio de estado (pendiente/finalizada/cancelada), asignación de clase desde el detalle
+- **Sesiones:** lista semanal navegable (lunes a domingo), crear (fecha+hora+grupo+clase opcionales), detalle con asistencia/nota/comentarios por alumno, cambio de estado (pendiente/finalizada/cancelada), asignación de clase desde el detalle
 - Trigger Supabase: al crear usuario en Auth se crea automáticamente en `public.usuarios`
 
 ### 🔜 Pendiente

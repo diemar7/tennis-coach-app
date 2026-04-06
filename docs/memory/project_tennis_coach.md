@@ -14,7 +14,8 @@ Supabase proyecto: `vrdcjhdjctvkhadjqiao`, org Baseline (`spgyrvqpaewcjyoqdmap`)
 
 **Usuarios creados:**
 - Diego: `diemar7@gmail.com`, username `diemar7`, rol `admin`, pass `Nano14`
-- Vane (la profe): `profetenisvanessa@gmail.com`, username `vane`, rol `coach`, pass `Vane123` — creada el 2026-04-03
+- Vane: `profetenisvanessa@gmail.com`, username `vane`, rol `coach`, pass `Vane123` — creada el 2026-04-03
+- Sofía (amiga y colega de Vane): `s.aishemberg@gmail.com`, username `sofi`, rol `coach`, pass `Sofi123` — creada el 2026-04-05
 
 **Lo implementado:**
 - Login con username o email
@@ -28,6 +29,10 @@ Supabase proyecto: `vrdcjhdjctvkhadjqiao`, org Baseline (`spgyrvqpaewcjyoqdmap`)
   - Hora opcional
   - Clase opcional, asignable/cambiable desde el detalle
   - Registros de alumnos creados automáticamente al crear la sesión
+
+**También implementado:**
+- Perfil de usuario: editar nombre/username, cambiar contraseña, cerrar sesión — accesible desde ícono en header
+- Logo (`logo.png`) como favicon y en pantalla de login
 
 **Próximo paso:** Historial de sesiones en ficha de alumno.
 
