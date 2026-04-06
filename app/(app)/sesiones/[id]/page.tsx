@@ -40,6 +40,9 @@ export default function DetalleSesionPage() {
   const [guardandoComentario, setGuardandoComentario] = useState<string | null>(null)
   const [mostrarCambioEstado, setMostrarCambioEstado] = useState(false)
   const [mostrarCambioClase, setMostrarCambioClase] = useState(false)
+  const [mostrarCambioFecha, setMostrarCambioFecha] = useState(false)
+  const [editFecha, setEditFecha] = useState('')
+  const [editHora, setEditHora] = useState('')
 
   useEffect(() => {
     load()
@@ -146,6 +149,17 @@ export default function DetalleSesionPage() {
     setMostrarCambioEstado(false)
   }
 
+  async function cambiarFecha() {
+    if (!sesion || !editFecha) return
+    const supabase = createClient()
+    await supabase.from('sesiones').update({
+      fecha: editFecha,
+      hora: editHora || null,
+    }).eq('id', sesion.id)
+    setSesion(prev => prev ? { ...prev, fecha: editFecha, hora: editHora || null } : prev)
+    setMostrarCambioFecha(false)
+  }
+
   async function cambiarClase(claseId: string | null) {
     if (!sesion) return
     const supabase = createClient()
@@ -218,10 +232,56 @@ export default function DetalleSesionPage() {
               {(sesion.grupo as any)?.nombre}
             </p>
           </div>
-          {sesion.hora && (
-            <p style={{ fontSize: 14, color: 'var(--color-text-muted)' }}>{sesion.hora.slice(0, 5)}</p>
-          )}
+          <div className="flex items-center gap-3">
+            {sesion.hora && (
+              <p style={{ fontSize: 14, color: 'var(--color-text-muted)' }}>{sesion.hora.slice(0, 5)}</p>
+            )}
+            <button
+              onClick={() => {
+                setEditFecha(sesion.fecha)
+                setEditHora(sesion.hora?.slice(0, 5) ?? '')
+                setMostrarCambioFecha(v => !v)
+              }}
+              style={{ fontSize: 12, color: 'var(--color-accent)', fontWeight: 500 }}
+            >
+              Editar fecha
+            </button>
+          </div>
         </div>
+
+        {mostrarCambioFecha && (
+          <div className="flex flex-col gap-2 pt-1">
+            <div className="flex gap-2">
+              <div className="flex flex-col gap-1 flex-1">
+                <p className="label-section">Fecha</p>
+                <input
+                  className="input"
+                  type="date"
+                  value={editFecha}
+                  onChange={e => setEditFecha(e.target.value)}
+                  style={{ fontSize: 13 }}
+                />
+              </div>
+              <div className="flex flex-col gap-1" style={{ width: 100 }}>
+                <p className="label-section">Hora <span style={{ textTransform: 'none', fontSize: 11, color: 'var(--color-text-muted)' }}>(opcional)</span></p>
+                <input
+                  className="input"
+                  type="time"
+                  value={editHora}
+                  onChange={e => setEditHora(e.target.value)}
+                  style={{ fontSize: 13 }}
+                />
+              </div>
+            </div>
+            <button
+              onClick={cambiarFecha}
+              className="btn-primary"
+              style={{ padding: '8px', fontSize: 13 }}
+            >
+              Guardar
+            </button>
+          </div>
+        )}
 
         <div>
           <div className="flex items-center justify-between">
