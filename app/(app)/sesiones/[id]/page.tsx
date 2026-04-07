@@ -41,6 +41,7 @@ export default function DetalleSesionPage() {
   const [mostrarCambioEstado, setMostrarCambioEstado] = useState(false)
   const [mostrarCambioClase, setMostrarCambioClase] = useState(false)
   const [mostrarCambioFecha, setMostrarCambioFecha] = useState(false)
+  const [mostrarConfirmEliminar, setMostrarConfirmEliminar] = useState(false)
   const [editFecha, setEditFecha] = useState('')
   const [editHora, setEditHora] = useState('')
 
@@ -162,7 +163,6 @@ export default function DetalleSesionPage() {
 
   async function eliminarSesion() {
     if (!sesion) return
-    if (!confirm('¿Seguro que querés eliminar esta sesión? Esta acción no se puede deshacer.')) return
     const supabase = createClient()
     await supabase.from('sesiones').delete().eq('id', sesion.id)
     router.replace('/sesiones')
@@ -475,11 +475,72 @@ export default function DetalleSesionPage() {
 
       {/* Eliminar sesión */}
       <button
-        onClick={eliminarSesion}
+        onClick={() => setMostrarConfirmEliminar(true)}
         style={{ fontSize: 13, color: '#c0392b', fontWeight: 500, marginTop: 24 }}
       >
         Eliminar sesión
       </button>
+
+      {/* Modal confirmación eliminar */}
+      {mostrarConfirmEliminar && (
+        <div
+          style={{
+            position: 'fixed', inset: 0, zIndex: 50,
+            backgroundColor: 'rgba(0,0,0,0.45)',
+            display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+          }}
+          onClick={() => setMostrarConfirmEliminar(false)}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              backgroundColor: 'var(--color-bg-card)',
+              borderRadius: '16px 16px 0 0',
+              padding: '24px 20px 36px',
+              width: '100%',
+              maxWidth: 480,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 16,
+            }}
+          >
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 6 }}>
+                Eliminar sesión
+              </p>
+              <p style={{ fontSize: 13, color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
+                ¿Seguro que querés eliminar esta sesión?{'\n'}Esta acción no se puede deshacer.
+              </p>
+            </div>
+            <button
+              onClick={eliminarSesion}
+              style={{
+                backgroundColor: '#c0392b',
+                color: '#fff',
+                borderRadius: 10,
+                padding: '13px',
+                fontSize: 15,
+                fontWeight: 600,
+              }}
+            >
+              Sí, eliminar
+            </button>
+            <button
+              onClick={() => setMostrarConfirmEliminar(false)}
+              style={{
+                backgroundColor: 'var(--color-bg-surface)',
+                color: 'var(--color-text-secondary)',
+                borderRadius: 10,
+                padding: '13px',
+                fontSize: 15,
+                fontWeight: 500,
+              }}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
