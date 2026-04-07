@@ -160,6 +160,14 @@ export default function DetalleSesionPage() {
     setMostrarCambioFecha(false)
   }
 
+  async function eliminarSesion() {
+    if (!sesion) return
+    if (!confirm('¿Seguro que querés eliminar esta sesión? Esta acción no se puede deshacer.')) return
+    const supabase = createClient()
+    await supabase.from('sesiones').delete().eq('id', sesion.id)
+    router.replace('/sesiones')
+  }
+
   async function cambiarClase(claseId: string | null) {
     if (!sesion) return
     const supabase = createClient()
@@ -464,6 +472,14 @@ export default function DetalleSesionPage() {
           )
         })}
       </div>
+
+      {/* Eliminar sesión */}
+      <button
+        onClick={eliminarSesion}
+        style={{ fontSize: 13, color: '#c0392b', fontWeight: 500, marginTop: 24 }}
+      >
+        Eliminar sesión
+      </button>
     </div>
   )
 }
