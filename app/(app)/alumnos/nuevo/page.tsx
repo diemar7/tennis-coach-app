@@ -5,20 +5,34 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import { NivelAlumno } from '@/lib/types'
 
-const NIVELES: { value: NivelAlumno; label: string }[] = [
+const NIVELES_ADULTO: { value: NivelAlumno; label: string }[] = [
   { value: 'principiante', label: 'Principiante' },
   { value: 'intermedio', label: 'Intermedio' },
   { value: 'avanzado', label: 'Avanzado' },
+]
+
+const NIVELES_NINO: { value: NivelAlumno; label: string }[] = [
+  { value: 'presco', label: 'Presco' },
+  { value: 'escuela', label: 'Escuela' },
+  { value: 'entrenamiento', label: 'Entrenamiento' },
 ]
 
 export default function NuevoAlumnoPage() {
   const router = useRouter()
   const [nombre, setNombre] = useState('')
   const [apellido, setApellido] = useState('')
+  const [esNino, setEsNino] = useState(false)
   const [nivel, setNivel] = useState<NivelAlumno>('principiante')
   const [notas, setNotas] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  function handleToggleNino(value: boolean) {
+    setEsNino(value)
+    setNivel(value ? 'presco' : 'principiante')
+  }
+
+  const niveles = esNino ? NIVELES_NINO : NIVELES_ADULTO
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -38,6 +52,7 @@ export default function NuevoAlumnoPage() {
       nombre: nombre.trim(),
       apellido: apellido.trim(),
       nivel,
+      es_nino: esNino,
       notas_generales: notas.trim() || null,
     })
 
@@ -88,10 +103,43 @@ export default function NuevoAlumnoPage() {
           />
         </div>
 
+        {/* Toggle niño / adulto */}
+        <div className="flex flex-col gap-1">
+          <label className="label-section">Categoría</label>
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => handleToggleNino(false)}
+              className="flex-1 py-2 rounded-lg text-sm font-medium"
+              style={{
+                backgroundColor: !esNino ? 'var(--color-primary)' : 'var(--color-bg-surface)',
+                color: !esNino ? '#fff' : 'var(--color-text-secondary)',
+                border: '0.5px solid',
+                borderColor: !esNino ? 'var(--color-primary)' : 'var(--color-border)',
+              }}
+            >
+              Adulto
+            </button>
+            <button
+              type="button"
+              onClick={() => handleToggleNino(true)}
+              className="flex-1 py-2 rounded-lg text-sm font-medium"
+              style={{
+                backgroundColor: esNino ? '#4fc3f7' : 'var(--color-bg-surface)',
+                color: esNino ? '#fff' : 'var(--color-text-secondary)',
+                border: '0.5px solid',
+                borderColor: esNino ? '#4fc3f7' : 'var(--color-border)',
+              }}
+            >
+              Niño
+            </button>
+          </div>
+        </div>
+
         <div className="flex flex-col gap-1">
           <label className="label-section">Nivel</label>
           <div className="flex gap-2">
-            {NIVELES.map(({ value, label }) => (
+            {niveles.map(({ value, label }) => (
               <button
                 key={value}
                 type="button"

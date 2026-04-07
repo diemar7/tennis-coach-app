@@ -6,16 +6,34 @@ import { createClient } from '@/lib/supabase'
 import { Alumno, NivelAlumno, TecnicaTipo, AsistenciaTipo, SesionEstado } from '@/lib/types'
 
 const NIVEL_LABEL: Record<NivelAlumno, string> = {
-  principiante: 'Principiante',
-  intermedio: 'Intermedio',
-  avanzado: 'Avanzado',
+  principiante:  'Principiante',
+  intermedio:    'Intermedio',
+  avanzado:      'Avanzado',
+  presco:        'Presco',
+  escuela:       'Escuela',
+  entrenamiento: 'Entrenamiento',
 }
 
 const NIVEL_STYLE: Record<NivelAlumno, { bg: string; color: string }> = {
-  principiante: { bg: '#e8f5e9', color: '#2e7d32' },
-  intermedio:   { bg: '#fff8e1', color: '#f57f17' },
-  avanzado:     { bg: '#fce4ec', color: '#c62828' },
+  principiante:  { bg: '#e8f5e9', color: '#2e7d32' },
+  intermedio:    { bg: '#fff8e1', color: '#f57f17' },
+  avanzado:      { bg: '#fce4ec', color: '#c62828' },
+  presco:        { bg: '#e3f2fd', color: '#1565c0' },
+  escuela:       { bg: '#e3f2fd', color: '#1565c0' },
+  entrenamiento: { bg: '#e3f2fd', color: '#1565c0' },
 }
+
+const NIVELES_ADULTO: { value: NivelAlumno; label: string }[] = [
+  { value: 'principiante', label: 'Principiante' },
+  { value: 'intermedio', label: 'Intermedio' },
+  { value: 'avanzado', label: 'Avanzado' },
+]
+
+const NIVELES_NINO: { value: NivelAlumno; label: string }[] = [
+  { value: 'presco', label: 'Presco' },
+  { value: 'escuela', label: 'Escuela' },
+  { value: 'entrenamiento', label: 'Entrenamiento' },
+]
 
 const TECNICA_LABEL: Record<TecnicaTipo, string> = {
   drive: 'Drive', reves: 'Revés', saque: 'Saque', volea: 'Volea',
@@ -66,6 +84,7 @@ export default function FichaAlumnoPage() {
   // Campos editables
   const [nombre, setNombre] = useState('')
   const [apellido, setApellido] = useState('')
+  const [esNino, setEsNino] = useState(false)
   const [nivel, setNivel] = useState<NivelAlumno>('principiante')
   const [notas, setNotas] = useState('')
 
@@ -90,6 +109,7 @@ export default function FichaAlumnoPage() {
         setAlumno(alumnoData)
         setNombre(alumnoData.nombre)
         setApellido(alumnoData.apellido)
+        setEsNino(alumnoData.es_nino)
         setNivel(alumnoData.nivel)
         setNotas(alumnoData.notas_generales ?? '')
       }
@@ -116,6 +136,7 @@ export default function FichaAlumnoPage() {
       .update({
         nombre: nombre.trim(),
         apellido: apellido.trim(),
+        es_nino: esNino,
         nivel,
         notas_generales: notas.trim() || null,
       })
@@ -189,12 +210,6 @@ export default function FichaAlumnoPage() {
     )
   }
 
-  const NIVELES: { value: NivelAlumno; label: string }[] = [
-    { value: 'principiante', label: 'Principiante' },
-    { value: 'intermedio', label: 'Intermedio' },
-    { value: 'avanzado', label: 'Avanzado' },
-  ]
-
   return (
     <div className="px-4 pt-6 pb-4">
       {/* Header */}
@@ -222,10 +237,15 @@ export default function FichaAlumnoPage() {
           {/* Datos del alumno */}
           <div className="card flex flex-col gap-3">
             <div className="flex items-center justify-between">
-              <span className="label-section">Nivel</span>
-              <span className="badge" style={{ backgroundColor: NIVEL_STYLE[alumno.nivel].bg, color: NIVEL_STYLE[alumno.nivel].color }}>
-                {NIVEL_LABEL[alumno.nivel]}
-              </span>
+              <span className="label-section">Categoría</span>
+              <div className="flex items-center gap-2">
+                {alumno.es_nino && (
+                  <span className="badge" style={{ backgroundColor: '#e3f2fd', color: '#1565c0' }}>Niño</span>
+                )}
+                <span className="badge" style={{ backgroundColor: NIVEL_STYLE[alumno.nivel].bg, color: NIVEL_STYLE[alumno.nivel].color }}>
+                  {NIVEL_LABEL[alumno.nivel]}
+                </span>
+              </div>
             </div>
 
             <div className="flex items-center justify-between">
@@ -432,10 +452,43 @@ export default function FichaAlumnoPage() {
             <input className="input" value={apellido} onChange={e => setApellido(e.target.value)} />
           </div>
 
+          {/* Toggle niño / adulto */}
+          <div className="flex flex-col gap-1">
+            <label className="label-section">Categoría</label>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => { setEsNino(false); setNivel('principiante') }}
+                className="flex-1 py-2 rounded-lg text-sm font-medium"
+                style={{
+                  backgroundColor: !esNino ? 'var(--color-primary)' : 'var(--color-bg-surface)',
+                  color: !esNino ? '#fff' : 'var(--color-text-secondary)',
+                  border: '0.5px solid',
+                  borderColor: !esNino ? 'var(--color-primary)' : 'var(--color-border)',
+                }}
+              >
+                Adulto
+              </button>
+              <button
+                type="button"
+                onClick={() => { setEsNino(true); setNivel('presco') }}
+                className="flex-1 py-2 rounded-lg text-sm font-medium"
+                style={{
+                  backgroundColor: esNino ? '#4fc3f7' : 'var(--color-bg-surface)',
+                  color: esNino ? '#fff' : 'var(--color-text-secondary)',
+                  border: '0.5px solid',
+                  borderColor: esNino ? '#4fc3f7' : 'var(--color-border)',
+                }}
+              >
+                Niño
+              </button>
+            </div>
+          </div>
+
           <div className="flex flex-col gap-1">
             <label className="label-section">Nivel</label>
             <div className="flex gap-2">
-              {NIVELES.map(({ value, label }) => (
+              {(esNino ? NIVELES_NINO : NIVELES_ADULTO).map(({ value, label }) => (
                 <button
                   key={value}
                   type="button"

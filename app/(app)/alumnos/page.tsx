@@ -9,12 +9,18 @@ const NIVEL_LABEL: Record<NivelAlumno, string> = {
   principiante: 'Principiante',
   intermedio: 'Intermedio',
   avanzado: 'Avanzado',
+  presco: 'Presco',
+  escuela: 'Escuela',
+  entrenamiento: 'Entrenamiento',
 }
 
 const NIVEL_STYLE: Record<NivelAlumno, { bg: string; color: string }> = {
-  principiante: { bg: '#e8f5e9', color: '#2e7d32' },
-  intermedio:   { bg: '#fff8e1', color: '#f57f17' },
-  avanzado:     { bg: '#fce4ec', color: '#c62828' },
+  principiante:  { bg: '#e8f5e9', color: '#2e7d32' },
+  intermedio:    { bg: '#fff8e1', color: '#f57f17' },
+  avanzado:      { bg: '#fce4ec', color: '#c62828' },
+  presco:        { bg: '#e3f2fd', color: '#1565c0' },
+  escuela:       { bg: '#e3f2fd', color: '#1565c0' },
+  entrenamiento: { bg: '#e3f2fd', color: '#1565c0' },
 }
 
 export default function AlumnosPage() {
@@ -95,9 +101,16 @@ export default function AlumnosPage() {
               style={{ opacity: alumno.activo ? 1 : 0.5 }}
             >
               <div className="flex flex-col gap-1">
-                <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--color-text-primary)' }}>
-                  {alumno.nombre} {alumno.apellido}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--color-text-primary)' }}>
+                    {alumno.nombre} {alumno.apellido}
+                  </span>
+                  {alumno.es_nino && (
+                    <span className="badge" style={{ backgroundColor: '#e3f2fd', color: '#1565c0', fontSize: 11 }}>
+                      Niño
+                    </span>
+                  )}
+                </div>
                 {alumno.notas_generales && (
                   <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }} className="line-clamp-1">
                     {alumno.notas_generales}

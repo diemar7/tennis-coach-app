@@ -5,9 +5,13 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import { Grupo } from '@/lib/types'
 
+interface GrupoConNinos extends Grupo {
+  esDeNinos: boolean
+}
+
 export default function GruposPage() {
   const router = useRouter()
-  const [grupos, setGrupos] = useState<Grupo[]>([])
+  const [grupos, setGrupos] = useState<GrupoConNinos[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -15,9 +19,24 @@ export default function GruposPage() {
       const supabase = createClient()
       const { data } = await supabase
         .from('grupos')
-        .select('*')
+        .select(`
+          *,
+          alumno_grupo(
+            alumno:alumnos(es_nino)
+          )
+        `)
         .order('nombre', { ascending: true })
-      setGrupos(data ?? [])
+
+      if (data) {
+        const grupосConNinos = data.map((g: any) => {
+          const alumnos: { es_nino: boolean }[] = (g.alumno_grupo ?? []).map((ag: any) => ag.alumno)
+          const tieneAlumnos = alumnos.length > 0
+          const todosNinos = tieneAlumnos && alumnos.every(a => a.es_nino)
+          return { ...g, esDeNinos: todosNinos }
+        })
+        setGrupos(grupосConNinos)
+      }
+
       setLoading(false)
     }
     load()
@@ -67,7 +86,7 @@ export default function GruposPage() {
   )
 }
 
-function GrupoCard({ grupo, onClick }: { grupo: Grupo; onClick: () => void }) {
+function GrupoCard({ grupo, onClick }: { grupo: GrupoConNinos; onClick: () => void }) {
   return (
     <button
       onClick={onClick}
@@ -75,9 +94,16 @@ function GrupoCard({ grupo, onClick }: { grupo: Grupo; onClick: () => void }) {
       style={{ opacity: grupo.activo ? 1 : 0.5 }}
     >
       <div className="flex flex-col gap-0.5">
-        <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--color-text-primary)' }}>
-          {grupo.nombre}
-        </span>
+        <div className="flex items-center gap-2">
+          <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--color-text-primary)' }}>
+            {grupo.nombre}
+          </span>
+          {grupo.esDeNinos && (
+            <span className="badge" style={{ backgroundColor: '#e3f2fd', color: '#1565c0', fontSize: 11 }}>
+              Niños
+            </span>
+          )}
+        </div>
         {grupo.descripcion && (
           <span style={{ fontSize: 12, color: 'var(--color-text-muted)' }} className="line-clamp-1">
             {grupo.descripcion}

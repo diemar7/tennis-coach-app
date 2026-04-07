@@ -1,5 +1,5 @@
 export type UserRole = 'coach' | 'admin'
-export type NivelAlumno = 'principiante' | 'intermedio' | 'avanzado'
+export type NivelAlumno = 'principiante' | 'intermedio' | 'avanzado' | 'presco' | 'escuela' | 'entrenamiento'
 export type TipoEtapa = 'calentamiento' | 'drill' | 'juego' | 'fisico'
 export type AsistenciaTipo = 'presente' | 'ausente' | 'justificado'
 export type SesionEstado = 'pendiente' | 'finalizada' | 'cancelada'
@@ -20,6 +20,7 @@ export interface Alumno {
   apellido: string
   fecha_ingreso: string
   nivel: NivelAlumno
+  es_nino: boolean
   notas_generales: string | null
   activo: boolean
   created_at: string
