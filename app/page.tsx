@@ -44,7 +44,7 @@ export default function LoginPage() {
       return
     }
 
-    router.push('/sesiones')
+    router.push('/home')
   }
 
   return (

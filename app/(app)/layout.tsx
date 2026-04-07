@@ -14,6 +14,7 @@ function IconPerfil() {
 }
 
 const NAV_ITEMS = [
+  { href: '/home', label: 'Inicio', icon: IconHome },
   { href: '/sesiones', label: 'Sesiones', icon: IconSesiones },
   { href: '/clases', label: 'Clases', icon: IconClases },
   { href: '/alumnos', label: 'Alumnos', icon: IconAlumnos },
@@ -98,6 +99,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         })}
       </nav>
     </div>
+  )
+}
+
+function IconHome({ active }: { active: boolean }) {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={active ? 2.2 : 1.8} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9.5L12 3l9 6.5V21a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z" />
+      <polyline points="9 22 9 12 15 12 15 22" />
+    </svg>
   )
 }
 
