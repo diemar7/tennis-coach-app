@@ -16,6 +16,7 @@ Supabase proyecto: `vrdcjhdjctvkhadjqiao`, org Baseline (`spgyrvqpaewcjyoqdmap`)
 - Diego: `diemar7@gmail.com`, username `diemar7`, rol `admin`, pass `Nano14`
 - Vane: `profetenisvanessa@gmail.com`, username `vane`, rol `coach`, pass `Vane123` — creada el 2026-04-03
 - Sofía (amiga y colega de Vane): `s.aishemberg@gmail.com`, username `sofi`, rol `coach`, pass `Sofi123` — creada el 2026-04-05
+- Andy Tapia (profe de tenis del hijo de Diego): `andytapiaok07@gmail.com`, username `andy`, rol `coach`, pass `Andy123` — creado el 2026-04-07
 
 **Lo implementado:**
 - Login con username o email
@@ -34,6 +35,22 @@ Supabase proyecto: `vrdcjhdjctvkhadjqiao`, org Baseline (`spgyrvqpaewcjyoqdmap`)
 - Perfil de usuario: editar nombre/username, cambiar contraseña, cerrar sesión — accesible desde ícono en header
 - Logo (`logo.png`) como favicon y en pantalla de login
 
-**Próximo paso:** Historial de sesiones en ficha de alumno.
+**También implementado (2026-04-07):**
+- Chips de promedio por técnica en ficha de alumno (clicables, activan el filtro)
+- Usuario Andy Tapia creado: `andytapiaok07@gmail.com`, username `andy`, rol `coach`, pass `Andy123`
+- Home con tip del día: ruta `/home`, tab Inicio en nav, login redirige a `/home`
+- `lib/tips.ts` con array de tips y `getTipDelDia()` rotativo por fecha
+- `docs/tips-bank.md` con 22 tips listos (001 usado, 21 libres)
+- `docs/tips-history.md` como registro anti-repetición
+- Skill `/add-tip` para agregar el próximo tip a demanda
+
+**También implementado (2026-04-05):**
+- Ficha de alumno: historial de sesiones con asistencia, nota, comentarios expandibles, filtro por técnica y promedio de notas destacado
+- Ficha de grupo: historial de sesiones con filtro por técnica y contador de sesiones
+- Sincronización automática de alumnos en sesiones pendientes (al abrir la sesión compara con el grupo actual)
+- Edición de fecha y hora en el detalle de sesión
+- RLS: admin tiene acceso completo de escritura en todas las tablas (migración `admin_full_write_access`)
+
+**Próximo paso:** por definir — v1 completa.
 
 **How to apply:** Al retomar, leer CLAUDE.md del proyecto para contexto completo.

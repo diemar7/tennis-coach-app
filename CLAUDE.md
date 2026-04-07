@@ -7,6 +7,7 @@ App web para coaches de tenis independientes. Permite planificar clases, registr
 **Coaches activas:**
 - Vane: username `vane`, email `profetenisvanessa@gmail.com`, pass `Vane123`
 - Sofía: username `sofi`, email `s.aishemberg@gmail.com`, pass `Sofi123`
+- Andy Tapia: username `andy`, email `andytapiaok07@gmail.com`, pass `Andy123` — profe de tenis del hijo de Diego
 
 **Diego** tiene rol `admin` — puede ver todos los datos de todos los coaches (username: `diemar7`, email: `diemar7@gmail.com`, pass: `Nano14`).
 
@@ -45,8 +46,16 @@ App web para coaches de tenis independientes. Permite planificar clases, registr
 - **Sesiones:** lista semanal navegable (lunes a domingo), crear (fecha+hora+grupo+clase opcionales), detalle con asistencia/nota/comentarios por alumno, cambio de estado (pendiente/finalizada/cancelada), asignación de clase desde el detalle
 - Trigger Supabase: al crear usuario en Auth se crea automáticamente en `public.usuarios`
 
+- **Ficha de alumno:** historial de sesiones con asistencia, nota, comentarios expandibles, filtro por técnica, promedio destacado y chips de promedio por técnica clicables
+- **Ficha de grupo:** historial de sesiones con filtro por técnica y contador de sesiones
+- **Sesiones pendientes:** al abrirlas se sincronizan automáticamente los alumnos del grupo (agrega faltantes, elimina los que ya no están sin datos)
+- **Edición de fecha/hora** en el detalle de sesión
+- **RLS admin:** Diego tiene acceso completo de escritura en todas las tablas durante el período de ajuste
+- **Home con tip del día:** ruta `/home` con card de tip rotativo, tab Inicio en nav, login redirige a `/home`. Tips en `lib/tips.ts`, banco en `docs/tips-bank.md`, skill `/add-tip` para agregar el próximo a demanda
+
 ### 🔜 Pendiente
-- **Ficha de alumno:** historial de sesiones (asistencia, nota, comentarios por sesión)
+- Ideas futuras: progreso por técnica, selector de tema, PWA
+- Automatizar `/add-tip` con schedule (hoy es a demanda)
 
 ---
 
@@ -78,8 +87,12 @@ app/
 lib/
   supabase.ts             — cliente Supabase singleton (lazy init)
   types.ts                — tipos TypeScript de todas las entidades
+  tips.ts                 — array de tips y getTipDelDia() (rota por fecha)
 public/
   favicon.svg             — pelota de tenis amarilla (#ccff00)
+docs/
+  tips-bank.md            — banco de tips categorizados (LIBRE/USADO)
+  tips-history.md         — registro de tips ya publicados
 ```
 
 ---

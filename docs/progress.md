@@ -79,10 +79,36 @@
 
 ---
 
-## Pendiente 🔜
+### Historial y filtros ✅
+- **Ficha de alumno:** historial de sesiones con fecha, grupo, clase, badge de técnica, asistencia y nota. Cada sesión expandible para ver comentarios y link directo a la sesión. Promedio de notas destacado (actualizable al filtrar por técnica). Dropdown de técnica que solo muestra las que el alumno realmente tuvo. Chips clicables de promedio por técnica debajo del promedio general (se ocultan al filtrar).
+- **Ficha de grupo:** historial de sesiones con fecha, clase, técnica y estado. Dropdown de técnica con contador de sesiones al filtrar.
 
-### Ficha de alumno
-- Historial de sesiones con asistencia, nota y comentarios
+### Sincronización de alumnos en sesiones pendientes ✅
+- Al abrir una sesión **pendiente**, se comparan los alumnos actuales del grupo con los registros existentes.
+- Se agregan los que faltan y se eliminan los que ya no están (solo si no tienen nota ni comentarios).
+- Sesiones finalizadas o canceladas no se tocan.
+
+### Edición de fecha y hora en sesión ✅
+- En el detalle de cualquier sesión hay un botón "Editar fecha" para corregir fecha y hora inline.
+
+### RLS admin — acceso completo de escritura ✅
+- Diego (admin) tiene acceso completo de escritura en todas las tablas durante el período de ajuste de la app.
+- Migración: `admin_full_write_access`
+
+---
+
+### Home con tip del día ✅
+- Nueva ruta `/home` — pantalla de bienvenida con tip de coaching del día
+- `lib/tips.ts` — array de tips con `getTipDelDia()` (rota por fecha)
+- Tab "Inicio" agregado como primera opción en la bottom nav
+- Login redirige a `/home` en lugar de `/sesiones`
+- `docs/tips-bank.md` — banco de 22 tips categorizados (Metodología, Táctica, Mental, Físico, Gestión, Desarrollo), basados en ITF, USTA, Mouratoglou, Kovacs Institute
+- `docs/tips-history.md` — registro de tips ya usados para evitar repetición
+- Skill `/add-tip` — agrega el próximo tip libre del banco a la app y pushea
+
+---
+
+## Pendiente 🔜
 
 ### Ideas futuras (fuera de v1)
 - Progreso por técnica por alumno (la base está: `tecnica` en clases + `nota` en registros)
@@ -90,3 +116,4 @@
 - PWA — installable en el celular
 - Historial visual de progresión por alumno
 - Múltiples coaches con comunidad
+- Automatizar `/add-tip` con schedule (hoy es a demanda)
