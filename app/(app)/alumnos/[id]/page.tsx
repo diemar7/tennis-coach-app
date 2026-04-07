@@ -161,6 +161,18 @@ export default function FichaAlumnoPage() {
     new Set(historial.map(r => r.sesion.clase?.tecnica).filter(Boolean) as TecnicaTipo[])
   )
 
+  // Promedio por técnica (solo cuando no hay filtro activo)
+  const promediosPorTecnica: { tecnica: TecnicaTipo; promedio: number; cantidad: number }[] = tecnicasUsadas
+    .map(tecnica => {
+      const regs = historial.filter(r =>
+        r.sesion.clase?.tecnica === tecnica && r.nota !== null && r.asistencia === 'presente'
+      )
+      if (regs.length === 0) return null
+      const prom = regs.reduce((acc, r) => acc + r.nota!, 0) / regs.length
+      return { tecnica, promedio: prom, cantidad: regs.length }
+    })
+    .filter(Boolean) as { tecnica: TecnicaTipo; promedio: number; cantidad: number }[]
+
   if (loading) {
     return (
       <div className="px-4 pt-6">
@@ -252,6 +264,28 @@ export default function FichaAlumnoPage() {
                   {filtroTecnica ? ` en ${TECNICA_LABEL[filtroTecnica].toLowerCase()}` : ''}
                   {' '}· {notasConValor.length} {notasConValor.length === 1 ? 'sesión' : 'sesiones'}
                 </div>
+
+                {/* Chips por técnica — solo cuando no hay filtro */}
+                {!filtroTecnica && promediosPorTecnica.length > 1 && (
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6, justifyContent: 'center', marginTop: 12, paddingTop: 10, borderTop: '0.5px solid var(--color-border)' }}>
+                    {promediosPorTecnica.map(({ tecnica, promedio: prom }) => (
+                      <button
+                        key={tecnica}
+                        onClick={() => setFiltroTecnica(tecnica)}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 5,
+                          backgroundColor: 'var(--color-bg-surface)',
+                          border: '0.5px solid var(--color-border)',
+                          borderRadius: 20, padding: '4px 10px',
+                          fontSize: 12, cursor: 'pointer',
+                        }}
+                      >
+                        <span style={{ color: 'var(--color-text-secondary)' }}>{TECNICA_LABEL[tecnica]}</span>
+                        <span style={{ color: 'var(--color-primary)', fontWeight: 600 }}>{prom.toFixed(1)}</span>
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 
