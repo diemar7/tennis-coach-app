@@ -17,7 +17,7 @@ Fuentes: ITF Coaching & Sport Science Review · Tennis Australia · USTA · Mour
 
 ---
 
-### 002 — Práctica variable vs. práctica bloqueada `[LIBRE]`
+### 002 — Práctica variable vs. práctica bloqueada `[USADO]`
 **Categoría:** Metodología  
 **Título:** Rompé la rutina del "mismo golpe 100 veces"  
 **Cuerpo:** La práctica bloqueada (repetir el mismo golpe en las mismas condiciones) da sensación de mejora rápida, pero los resultados en el partido son pobres. La práctica variable —mezclando tipos de golpes, direcciones y situaciones sin previo aviso— genera más errores al principio pero una retención mucho mayor. El cerebro aprende mejor cuando tiene que resolver pequeños problemas en cada pelota, no cuando está en piloto automático.  
