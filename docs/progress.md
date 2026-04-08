@@ -106,6 +106,7 @@
 - `docs/tips-history.md` — registro de tips ya usados para evitar repetición
 - Skill `/add-tip` — agrega el próximo tip libre del banco a la app y pushea
 - **Tips en la app:** 2 (001 y 002 usados, 20 libres restantes) — último agregado: tip 002 (2026-04-08)
+- **Tips anteriores en /home:** sección colapsable al final de la pantalla con todos los tips ya publicados excepto el de hoy, en orden inverso. Cada card tiene badge de categoría + título, y se expande al tocar para ver el cuerpo. `getTipsAnteriores()` en `lib/tips.ts`.
 
 ---
 

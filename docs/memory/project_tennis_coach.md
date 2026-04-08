@@ -43,6 +43,7 @@ Supabase proyecto: `vrdcjhdjctvkhadjqiao`, org Baseline (`spgyrvqpaewcjyoqdmap`)
 - `docs/tips-bank.md` con 22 tips listos (002 usado, 20 libres) — último tip agregado: 002 (2026-04-08)
 - `docs/tips-history.md` como registro anti-repetición
 - Skill `/add-tip` para agregar el próximo tip a demanda
+- **Tips anteriores en /home (2026-04-08):** sección colapsable al final de `/home` con todos los tips publicados excepto el de hoy. `getTipsAnteriores()` en `lib/tips.ts`.
 - **Distinción niños/adultos:** campo `es_nino` en alumnos, niveles propios (Presco/Escuela/Entrenamiento), badge azul `Niño` en lista y ficha, badge `Niños` automático en grupos si todos son niños
 - **Eliminar sesión:** botón en detalle de sesión con bottom sheet modal de confirmación
 - **Compartir clases:** tablas coach_colega + clase_compartida. Selector de colegas al crear/editar clase. Badge violeta en lista. Dueño ve con quién compartió, colega ve quién compartió. Ambas editan la misma clase.
