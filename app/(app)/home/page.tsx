@@ -1,6 +1,7 @@
 'use client'
 
-import { getTipDelDia } from '@/lib/tips'
+import { useState } from 'react'
+import { getTipDelDia, getTipsAnteriores, type Tip } from '@/lib/tips'
 
 const CATEGORIA_STYLE: Record<string, { bg: string; color: string }> = {
   'Metodología': { bg: '#e8e0f0', color: '#4a2a80' },
@@ -14,8 +15,57 @@ function getEstilo(categoria: string) {
   return CATEGORIA_STYLE[categoria] ?? { bg: '#e8e8e8', color: '#333' }
 }
 
+function TipAnteriorCard({ tip }: { tip: Tip }) {
+  const [abierto, setAbierto] = useState(false)
+  const estilo = getEstilo(tip.categoria)
+
+  return (
+    <div
+      className="card"
+      style={{ borderLeft: `3px solid ${estilo.color}`, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 8 }}
+    >
+      <div
+        style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', cursor: 'pointer', gap: 12 }}
+        onClick={() => setAbierto(v => !v)}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          <span
+            style={{
+              display: 'inline-block',
+              alignSelf: 'flex-start',
+              backgroundColor: estilo.bg,
+              color: estilo.color,
+              fontSize: 10,
+              fontWeight: 600,
+              padding: '2px 8px',
+              borderRadius: 20,
+              letterSpacing: '0.04em',
+              textTransform: 'uppercase',
+            }}
+          >
+            {tip.categoria}
+          </span>
+          <span style={{ fontSize: 15, fontWeight: 600, color: 'var(--color-text-primary)', lineHeight: 1.3 }}>
+            {tip.titulo}
+          </span>
+        </div>
+        <span style={{ fontSize: 18, color: 'var(--color-text-muted)', flexShrink: 0 }}>
+          {abierto ? '▲' : '▼'}
+        </span>
+      </div>
+
+      {abierto && (
+        <p style={{ fontSize: 14, lineHeight: 1.65, color: 'var(--color-text-secondary)', margin: 0 }}>
+          {tip.cuerpo}
+        </p>
+      )}
+    </div>
+  )
+}
+
 export default function HomePage() {
   const tip = getTipDelDia()
+  const anteriores = getTipsAnteriores()
   const estilo = getEstilo(tip.categoria)
 
   return (
@@ -99,6 +149,19 @@ export default function HomePage() {
       >
         Nuevo tip cada día · Basado en metodología moderna
       </p>
+
+      {/* Tips anteriores */}
+      {anteriores.length > 0 && (
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <h2 style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-text-primary)', margin: 0 }}>
+            Tips anteriores
+          </h2>
+          {anteriores.map(t => (
+            <TipAnteriorCard key={t.id} tip={t} />
+          ))}
+        </div>
+      )}
+
     </div>
   )
 }
