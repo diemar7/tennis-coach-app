@@ -108,6 +108,21 @@
 
 ---
 
+### Distinción niños / adultos ✅ (2026-04-07)
+- Migración `add_nino_niveles`: columna `es_nino boolean` en `alumnos` + nuevos valores en enum `nivel_alumno`: `presco`, `escuela`, `entrenamiento`
+- **Crear alumno:** toggle Adulto / Niño; el selector de nivel cambia dinámicamente (adultos: Principiante/Intermedio/Avanzado — niños: Presco/Escuela/Entrenamiento)
+- **Editar alumno (ficha):** mismo toggle con niveles dinámicos; al cambiar de categoría resetea el nivel al primero correspondiente
+- **Lista de alumnos:** badge azul `Niño` al lado del nombre si `es_nino = true`
+- **Ficha de alumno:** sección "Categoría" muestra badge `Niño` + badge de nivel
+- **Lista de grupos:** badge `Niños` automático si todos los alumnos del grupo son niños
+
+### Eliminar sesión ✅ (2026-04-07)
+- Botón "Eliminar sesión" al final del detalle de sesión
+- Confirmación mediante bottom sheet modal (no `confirm()` del browser): fondo oscuro, sube desde abajo, botón rojo "Sí, eliminar" y botón gris "Cancelar". Se cierra tocando el fondo.
+- Al confirmar elimina la sesión y vuelve a `/sesiones`
+
+---
+
 ## Pendiente 🔜
 
 ### Ideas futuras (fuera de v1)

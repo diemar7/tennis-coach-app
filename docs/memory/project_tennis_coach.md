@@ -43,6 +43,8 @@ Supabase proyecto: `vrdcjhdjctvkhadjqiao`, org Baseline (`spgyrvqpaewcjyoqdmap`)
 - `docs/tips-bank.md` con 22 tips listos (001 usado, 21 libres)
 - `docs/tips-history.md` como registro anti-repetición
 - Skill `/add-tip` para agregar el próximo tip a demanda
+- **Distinción niños/adultos:** campo `es_nino` en alumnos, niveles propios (Presco/Escuela/Entrenamiento), badge azul `Niño` en lista y ficha, badge `Niños` automático en grupos si todos son niños
+- **Eliminar sesión:** botón en detalle de sesión con bottom sheet modal de confirmación
 
 **También implementado (2026-04-05):**
 - Ficha de alumno: historial de sesiones con asistencia, nota, comentarios expandibles, filtro por técnica y promedio de notas destacado

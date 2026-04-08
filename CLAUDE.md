@@ -52,6 +52,8 @@ App web para coaches de tenis independientes. Permite planificar clases, registr
 - **Edición de fecha/hora** en el detalle de sesión
 - **RLS admin:** Diego tiene acceso completo de escritura en todas las tablas durante el período de ajuste
 - **Home con tip del día:** ruta `/home` con card de tip rotativo, tab Inicio en nav, login redirige a `/home`. Tips en `lib/tips.ts`, banco en `docs/tips-bank.md`, skill `/add-tip` para agregar el próximo a demanda
+- **Distinción niños/adultos:** campo `es_nino` en `alumnos`, enum `nivel_alumno` ampliado (presco, escuela, entrenamiento). Toggle Adulto/Niño en crear y editar alumno, niveles dinámicos según categoría. Badge azul `Niño` en lista y ficha. Lista de grupos: badge `Niños` automático si todos los alumnos son niños.
+- **Eliminar sesión:** botón al final del detalle con bottom sheet modal de confirmación estilizado
 
 ### 🔜 Pendiente
 - Ideas futuras: progreso por técnica, selector de tema, PWA
@@ -101,7 +103,7 @@ docs/
 
 ```
 Usuario            → rol: 'coach' | 'admin', username único
-Alumno             → pertenece a coach, nivel: principiante|intermedio|avanzado, activo
+Alumno             → pertenece a coach, nivel: principiante|intermedio|avanzado|presco|escuela|entrenamiento, es_nino: bool, activo
 Grupo              → pertenece a coach, activo
 AlumnoGrupo        → pivot many-to-many alumno <-> grupo
 Clase              → plantilla reutilizable, pertenece a coach, tecnica?: tecnica_tipo
