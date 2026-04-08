@@ -68,6 +68,7 @@ export default function DetalleClasePage() {
   const [editando, setEditando] = useState(false)
   const [guardando, setGuardando] = useState(false)
   const [esDueno, setEsDueno] = useState(false)
+  const [nombreDueno, setNombreDueno] = useState<string | null>(null)
 
   // Colegas disponibles y seleccionadas para compartir
   const [colegas, setColegas] = useState<Colega[]>([])
@@ -105,7 +106,18 @@ export default function DetalleClasePage() {
           descripcion: e.descripcion,
           duracion_minutos: e.duracion_minutos?.toString() ?? '',
         })))
-        setEsDueno(data.coach_id === user.id)
+        const dueno = data.coach_id === user.id
+        setEsDueno(dueno)
+
+        // Si no es el dueño, traer el nombre del dueño
+        if (!dueno) {
+          const { data: duenoDato } = await supabase
+            .from('usuarios')
+            .select('nombre')
+            .eq('id', data.coach_id)
+            .single()
+          if (duenoDato) setNombreDueno(duenoDato.nombre)
+        }
       }
 
       // IDs de con quién está compartida actualmente
@@ -257,7 +269,7 @@ export default function DetalleClasePage() {
             </div>
           )}
 
-          {/* Compartida con */}
+          {/* Compartida con (vista del dueño) */}
           {esDueno && compartidaCon.size > 0 && colegas.length > 0 && (
             <div className="flex flex-col gap-1">
               <p className="label-section">Compartida con</p>
@@ -268,6 +280,16 @@ export default function DetalleClasePage() {
                   </span>
                 ))}
               </div>
+            </div>
+          )}
+
+          {/* Compartida por (vista de quien recibe) */}
+          {!esDueno && nombreDueno && (
+            <div className="flex flex-col gap-1">
+              <p className="label-section">Compartida por</p>
+              <span className="badge" style={{ backgroundColor: '#ede7f6', color: '#6a1b9a', alignSelf: 'flex-start' }}>
+                {nombreDueno}
+              </span>
             </div>
           )}
 
