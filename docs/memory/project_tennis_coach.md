@@ -40,7 +40,7 @@ Supabase proyecto: `vrdcjhdjctvkhadjqiao`, org Baseline (`spgyrvqpaewcjyoqdmap`)
 - Usuario Andy Tapia creado: `andytapiaok07@gmail.com`, username `andy`, rol `coach`, pass `Andy123`
 - Home con tip del día: ruta `/home`, tab Inicio en nav, login redirige a `/home`
 - `lib/tips.ts` con array de tips y `getTipDelDia()` rotativo por fecha
-- `docs/tips-bank.md` con 22 tips listos (001 usado, 21 libres)
+- `docs/tips-bank.md` con 22 tips listos (002 usado, 20 libres) — último tip agregado: 002 (2026-04-08)
 - `docs/tips-history.md` como registro anti-repetición
 - Skill `/add-tip` para agregar el próximo tip a demanda
 - **Distinción niños/adultos:** campo `es_nino` en alumnos, niveles propios (Presco/Escuela/Entrenamiento), badge azul `Niño` en lista y ficha, badge `Niños` automático en grupos si todos son niños

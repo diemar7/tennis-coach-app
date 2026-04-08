@@ -105,6 +105,7 @@
 - `docs/tips-bank.md` — banco de 22 tips categorizados (Metodología, Táctica, Mental, Físico, Gestión, Desarrollo), basados en ITF, USTA, Mouratoglou, Kovacs Institute
 - `docs/tips-history.md` — registro de tips ya usados para evitar repetición
 - Skill `/add-tip` — agrega el próximo tip libre del banco a la app y pushea
+- **Tips en la app:** 2 (001 y 002 usados, 20 libres restantes) — último agregado: tip 002 (2026-04-08)
 
 ---
 
