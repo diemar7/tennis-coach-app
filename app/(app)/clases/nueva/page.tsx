@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import { TipoEtapa, TecnicaTipo } from '@/lib/types'
@@ -44,6 +44,12 @@ function nuevaEtapa(): EtapaForm {
   return { id: crypto.randomUUID(), tipo: 'drill', descripcion: '', duracion_minutos: '' }
 }
 
+interface Colega {
+  id: string
+  nombre: string
+  username: string
+}
+
 export default function NuevaClasePage() {
   const router = useRouter()
   const [titulo, setTitulo] = useState('')
@@ -52,6 +58,30 @@ export default function NuevaClasePage() {
   const [etapas, setEtapas] = useState<EtapaForm[]>([nuevaEtapa()])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [colegas, setColegas] = useState<Colega[]>([])
+  const [compartidaCon, setCompartidaCon] = useState<Set<string>>(new Set())
+
+  useEffect(() => {
+    async function loadColegas() {
+      const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+      const { data: colegasData } = await supabase
+        .from('coach_colega')
+        .select('coach_id, colega_id')
+        .or(`coach_id.eq.${user.id},colega_id.eq.${user.id}`)
+      if (!colegasData || colegasData.length === 0) return
+      const colegaIds = colegasData.map((r: { coach_id: string; colega_id: string }) =>
+        r.coach_id === user.id ? r.colega_id : r.coach_id
+      )
+      const { data: usuarios } = await supabase
+        .from('usuarios')
+        .select('id, nombre, username')
+        .in('id', colegaIds)
+      setColegas(usuarios ?? [])
+    }
+    loadColegas()
+  }, [])
 
   function agregarEtapa() {
     setEtapas(prev => [...prev, nuevaEtapa()])
@@ -108,6 +138,12 @@ export default function NuevaClasePage() {
           duracion_minutos: e.duracion_minutos ? parseInt(e.duracion_minutos) : null,
           orden: i,
         }))
+      )
+    }
+
+    if (compartidaCon.size > 0) {
+      await supabase.from('clase_compartida').insert(
+        [...compartidaCon].map(coach_id => ({ clase_id: clase.id, coach_id }))
       )
     }
 
@@ -270,6 +306,42 @@ export default function NuevaClasePage() {
             + Agregar etapa
           </button>
         </div>
+
+        {/* Compartir con colegas */}
+        {colegas.length > 0 && (
+          <div className="flex flex-col gap-2">
+            <label className="label-section">Compartir con <span style={{ color: 'var(--color-text-muted)', textTransform: 'none', fontSize: 11 }}>(opcional)</span></label>
+            <div className="flex flex-wrap gap-2">
+              {colegas.map(colega => {
+                const seleccionada = compartidaCon.has(colega.id)
+                return (
+                  <button
+                    key={colega.id}
+                    type="button"
+                    onClick={() => {
+                      setCompartidaCon(prev => {
+                        const next = new Set(prev)
+                        if (next.has(colega.id)) next.delete(colega.id)
+                        else next.add(colega.id)
+                        return next
+                      })
+                    }}
+                    className="badge"
+                    style={{
+                      backgroundColor: seleccionada ? '#ede7f6' : 'var(--color-bg-surface)',
+                      color: seleccionada ? '#6a1b9a' : 'var(--color-text-muted)',
+                      border: '0.5px solid',
+                      borderColor: seleccionada ? '#6a1b9a' : 'var(--color-border)',
+                      padding: '6px 12px',
+                    }}
+                  >
+                    {colega.nombre}
+                  </button>
+                )
+              })}
+            </div>
+          </div>
+        )}
 
         {error && (
           <p className="text-sm text-center" style={{ color: '#c0392b' }}>{error}</p>

@@ -53,6 +53,12 @@ const TIPO_STYLE: Record<TipoEtapa, string> = {
   fisico: 'badge-fisico',
 }
 
+interface Colega {
+  id: string
+  nombre: string
+  username: string
+}
+
 export default function DetalleClasePage() {
   const router = useRouter()
   const params = useParams()
@@ -61,6 +67,11 @@ export default function DetalleClasePage() {
   const [loading, setLoading] = useState(true)
   const [editando, setEditando] = useState(false)
   const [guardando, setGuardando] = useState(false)
+  const [esDueno, setEsDueno] = useState(false)
+
+  // Colegas disponibles y seleccionadas para compartir
+  const [colegas, setColegas] = useState<Colega[]>([])
+  const [compartidaCon, setCompartidaCon] = useState<Set<string>>(new Set())
 
   // Campos editables
   const [titulo, setTitulo] = useState('')
@@ -71,11 +82,15 @@ export default function DetalleClasePage() {
   useEffect(() => {
     async function load() {
       const supabase = createClient()
-      const { data } = await supabase
-        .from('clases')
-        .select('*, etapas(*)')
-        .eq('id', params.id)
-        .single()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      const [{ data }, { data: compartidos }, { data: colegasData }] = await Promise.all([
+        supabase.from('clases').select('*, etapas(*)').eq('id', params.id).single(),
+        supabase.from('clase_compartida').select('coach_id').eq('clase_id', params.id),
+        // Colegas: coaches que tienen relación con el usuario actual (en cualquier dirección)
+        supabase.from('coach_colega').select('coach_id, colega_id').or(`coach_id.eq.${user.id},colega_id.eq.${user.id}`),
+      ])
 
       if (data) {
         setClase(data)
@@ -90,7 +105,24 @@ export default function DetalleClasePage() {
           descripcion: e.descripcion,
           duracion_minutos: e.duracion_minutos?.toString() ?? '',
         })))
+        setEsDueno(data.coach_id === user.id)
       }
+
+      // IDs de con quién está compartida actualmente
+      setCompartidaCon(new Set((compartidos ?? []).map((r: { coach_id: string }) => r.coach_id)))
+
+      // Buscar los usuarios colegas
+      if (colegasData && colegasData.length > 0) {
+        const colegaIds = colegasData.map((r: { coach_id: string; colega_id: string }) =>
+          r.coach_id === user.id ? r.colega_id : r.coach_id
+        )
+        const { data: usuarios } = await supabase
+          .from('usuarios')
+          .select('id, nombre, username')
+          .in('id', colegaIds)
+        setColegas(usuarios ?? [])
+      }
+
       setLoading(false)
     }
     load()
@@ -166,6 +198,16 @@ export default function DetalleClasePage() {
       })))
     }
 
+    // Sincronizar clase_compartida si es el dueño
+    if (esDueno && colegas.length > 0) {
+      await supabase.from('clase_compartida').delete().eq('clase_id', clase.id)
+      if (compartidaCon.size > 0) {
+        await supabase.from('clase_compartida').insert(
+          [...compartidaCon].map(coach_id => ({ clase_id: clase.id, coach_id }))
+        )
+      }
+    }
+
     setGuardando(false)
     setEditando(false)
   }
@@ -212,6 +254,20 @@ export default function DetalleClasePage() {
                   <p style={{ fontSize: 13, color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>{clase.objetivo}</p>
                 </div>
               )}
+            </div>
+          )}
+
+          {/* Compartida con */}
+          {esDueno && compartidaCon.size > 0 && colegas.length > 0 && (
+            <div className="flex flex-col gap-1">
+              <p className="label-section">Compartida con</p>
+              <div className="flex flex-wrap gap-1.5">
+                {colegas.filter(c => compartidaCon.has(c.id)).map(c => (
+                  <span key={c.id} className="badge" style={{ backgroundColor: '#ede7f6', color: '#6a1b9a' }}>
+                    {c.nombre}
+                  </span>
+                ))}
+              </div>
             </div>
           )}
 
@@ -340,6 +396,42 @@ export default function DetalleClasePage() {
               + Agregar etapa
             </button>
           </div>
+
+          {/* Compartir con colegas — solo si es el dueño y tiene colegas */}
+          {esDueno && colegas.length > 0 && (
+            <div className="flex flex-col gap-2">
+              <label className="label-section">Compartir con</label>
+              <div className="flex flex-wrap gap-2">
+                {colegas.map(colega => {
+                  const seleccionada = compartidaCon.has(colega.id)
+                  return (
+                    <button
+                      key={colega.id}
+                      type="button"
+                      onClick={() => {
+                        setCompartidaCon(prev => {
+                          const next = new Set(prev)
+                          if (next.has(colega.id)) next.delete(colega.id)
+                          else next.add(colega.id)
+                          return next
+                        })
+                      }}
+                      className="badge"
+                      style={{
+                        backgroundColor: seleccionada ? '#ede7f6' : 'var(--color-bg-surface)',
+                        color: seleccionada ? '#6a1b9a' : 'var(--color-text-muted)',
+                        border: '0.5px solid',
+                        borderColor: seleccionada ? '#6a1b9a' : 'var(--color-border)',
+                        padding: '6px 12px',
+                      }}
+                    >
+                      {colega.nombre}
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          )}
 
           <button onClick={handleGuardar} className="btn-primary mt-2" disabled={guardando}>
             {guardando ? 'Guardando...' : 'Guardar cambios'}

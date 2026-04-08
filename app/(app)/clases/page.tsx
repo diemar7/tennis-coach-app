@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
 import { Clase, Etapa, TecnicaTipo } from '@/lib/types'
 
-type ClaseConEtapas = Clase & { etapas: Etapa[] }
+type ClaseConEtapas = Clase & { etapas: Etapa[]; compartida?: boolean }
 
 const TIPO_LABEL: Record<string, string> = {
   calentamiento: 'Calentamiento',
@@ -27,11 +27,36 @@ export default function ClasesPage() {
   useEffect(() => {
     async function load() {
       const supabase = createClient()
-      const { data } = await supabase
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
+
+      // Clases propias
+      const { data: propias } = await supabase
         .from('clases')
         .select('*, etapas(*)')
+        .eq('coach_id', user.id)
         .order('created_at', { ascending: false })
-      setClases(data ?? [])
+
+      // Clases compartidas con este coach
+      const { data: compartidas } = await supabase
+        .from('clase_compartida')
+        .select('clase:clases(*, etapas(*))')
+        .eq('coach_id', user.id)
+
+      const clasesCompartidas: ClaseConEtapas[] = (compartidas ?? [])
+        .map((r: any) => ({ ...r.clase, compartida: true }))
+        .filter(Boolean)
+
+      // Mezclar, sin duplicados (por si el dueño ve la suya compartida)
+      const idsPropias = new Set((propias ?? []).map((c: Clase) => c.id))
+      const soloCompartidas = clasesCompartidas.filter(c => !idsPropias.has(c.id))
+
+      const todas = [
+        ...(propias ?? []).map((c: ClaseConEtapas) => ({ ...c, compartida: false })),
+        ...soloCompartidas,
+      ].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+
+      setClases(todas)
       setLoading(false)
     }
     load()
@@ -66,13 +91,18 @@ export default function ClasesPage() {
                 className="card text-left flex flex-col gap-2"
               >
                 <div className="flex items-start justify-between gap-2">
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-1 min-w-0 flex-wrap">
                     <span style={{ fontSize: 15, fontWeight: 500, color: 'var(--color-text-primary)' }}>
                       {clase.titulo}
                     </span>
                     {clase.tecnica && (
                       <span className="badge badge-tecnica" style={{ flexShrink: 0 }}>
                         {TECNICA_LABEL[clase.tecnica]}
+                      </span>
+                    )}
+                    {clase.compartida && (
+                      <span className="badge" style={{ backgroundColor: '#ede7f6', color: '#6a1b9a', flexShrink: 0 }}>
+                        Compartida
                       </span>
                     )}
                   </div>
