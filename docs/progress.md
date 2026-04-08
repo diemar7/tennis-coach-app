@@ -123,6 +123,16 @@
 
 ---
 
+### Compartir clases entre colegas ✅ (2026-04-07)
+- Tablas `coach_colega` (relación entre coaches que pueden compartir) y `clase_compartida` (a quién está compartida cada clase)
+- Relación vane-sofi insertada en `coach_colega`
+- Nueva clase y editar clase: selector de colegas para compartir (chips violetas)
+- Lista de clases: badge violeta `Compartida` en clases compartidas, mezcladas con las propias
+- Detalle de clase: el dueño ve "Compartida con [nombre]", la colega ve "Compartida por [nombre]"
+- Ambas pueden editar la misma clase y asignarla a sus sesiones
+- Escala: agregar más colegas solo requiere insertar en `coach_colega`
+- RLS: políticas sin loops circulares — `clase_compartida` y `usuarios` con acceso abierto a autenticados
+
 ## Pendiente 🔜
 
 ### Ideas futuras (fuera de v1)

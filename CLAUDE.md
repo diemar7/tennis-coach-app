@@ -54,6 +54,7 @@ App web para coaches de tenis independientes. Permite planificar clases, registr
 - **Home con tip del día:** ruta `/home` con card de tip rotativo, tab Inicio en nav, login redirige a `/home`. Tips en `lib/tips.ts`, banco en `docs/tips-bank.md`, skill `/add-tip` para agregar el próximo a demanda
 - **Distinción niños/adultos:** campo `es_nino` en `alumnos`, enum `nivel_alumno` ampliado (presco, escuela, entrenamiento). Toggle Adulto/Niño en crear y editar alumno, niveles dinámicos según categoría. Badge azul `Niño` en lista y ficha. Lista de grupos: badge `Niños` automático si todos los alumnos son niños.
 - **Eliminar sesión:** botón al final del detalle con bottom sheet modal de confirmación estilizado
+- **Compartir clases entre colegas:** tablas `coach_colega` + `clase_compartida`. Al crear/editar clase aparece selector de colegas. Badge violeta `Compartida` en lista. Detalle muestra "Compartida con X" (dueño) o "Compartida por X" (colega). Ambas editan la misma clase.
 
 ### 🔜 Pendiente
 - Ideas futuras: progreso por técnica, selector de tema, PWA
