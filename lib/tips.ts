@@ -22,15 +22,10 @@ export const TIPS: Tip[] = [
   },
 ]
 
-export function getTipDelDiaIdx(): number {
-  return Math.floor(Date.now() / (1000 * 60 * 60 * 24)) % TIPS.length
-}
-
 export function getTipDelDia(): Tip {
-  return TIPS[getTipDelDiaIdx()]
+  return TIPS[TIPS.length - 1]
 }
 
 export function getTipsAnteriores(): Tip[] {
-  const hoyIdx = getTipDelDiaIdx()
-  return TIPS.slice(0, hoyIdx).reverse()
+  return TIPS.slice(0, TIPS.length - 1).reverse()
 }
