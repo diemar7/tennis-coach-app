@@ -52,7 +52,7 @@ App web para coaches de tenis independientes. Permite planificar clases, registr
 - **Edición de fecha/hora** en el detalle de sesión
 - **RLS admin:** Diego tiene acceso completo de escritura en todas las tablas durante el período de ajuste
 - **Home con tip del día:** ruta `/home` con card de tip rotativo, tab Inicio en nav, login redirige a `/home`. Tips en `lib/tips.ts`, banco en `docs/tips-bank.md`, skill `/add-tip` para agregar el próximo a demanda
-- **Tips anteriores en /home:** sección colapsable al final con todos los tips publicados excepto el de hoy, en orden inverso. `getTipsAnteriores()` en `lib/tips.ts`.
+- **Tips anteriores en /home:** sección colapsable al final con todos los tips publicados excepto el de hoy, en orden inverso. `getTipsAnteriores()` en `lib/tips.ts`. Lógica: último del array = tip del día, resto = historial (sin rotación por fecha).
 - **Distinción niños/adultos:** campo `es_nino` en `alumnos`, enum `nivel_alumno` ampliado (presco, escuela, entrenamiento). Toggle Adulto/Niño en crear y editar alumno, niveles dinámicos según categoría. Badge azul `Niño` en lista y ficha. Lista de grupos: badge `Niños` automático si todos los alumnos son niños.
 - **Eliminar sesión:** botón al final del detalle con bottom sheet modal de confirmación estilizado
 - **Compartir clases entre colegas:** tablas `coach_colega` + `clase_compartida`. Al crear/editar clase aparece selector de colegas. Badge violeta `Compartida` en lista. Detalle muestra "Compartida con X" (dueño) o "Compartida por X" (colega). Ambas editan la misma clase.
@@ -91,7 +91,7 @@ app/
 lib/
   supabase.ts             — cliente Supabase singleton (lazy init)
   types.ts                — tipos TypeScript de todas las entidades
-  tips.ts                 — array de tips y getTipDelDia() (rota por fecha)
+  tips.ts                 — array de tips, getTipDelDia() (último del array) y getTipsAnteriores()
 public/
   favicon.svg             — pelota de tenis amarilla (#ccff00)
 docs/

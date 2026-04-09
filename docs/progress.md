@@ -105,8 +105,9 @@
 - `docs/tips-bank.md` — banco de 22 tips categorizados (Metodología, Táctica, Mental, Físico, Gestión, Desarrollo), basados en ITF, USTA, Mouratoglou, Kovacs Institute
 - `docs/tips-history.md` — registro de tips ya usados para evitar repetición
 - Skill `/add-tip` — agrega el próximo tip libre del banco a la app y pushea
-- **Tips en la app:** 2 (001 y 002 usados, 20 libres restantes) — último agregado: tip 002 (2026-04-08)
+- **Tips en la app:** 3 (001, 002, 003 usados, 19 libres restantes) — último agregado: tip 003 (2026-04-09)
 - **Tips anteriores en /home:** sección colapsable al final de la pantalla con todos los tips ya publicados excepto el de hoy, en orden inverso. Cada card tiene badge de categoría + título, y se expande al tocar para ver el cuerpo. `getTipsAnteriores()` en `lib/tips.ts`.
+- **Fix lógica tip del día (2026-04-09):** el último tip del array es siempre el del día; los anteriores son el historial. Eliminada la rotación por fecha (`% TIPS.length`) que causaba que el historial quedara vacío según el día.
 
 ---
 
