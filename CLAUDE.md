@@ -56,9 +56,10 @@ App web para coaches de tenis independientes. Permite planificar clases, registr
 - **Distinción niños/adultos:** campo `es_nino` en `alumnos`, enum `nivel_alumno` ampliado (presco, escuela, entrenamiento). Toggle Adulto/Niño en crear y editar alumno, niveles dinámicos según categoría. Badge azul `Niño` en lista y ficha. Lista de grupos: badge `Niños` automático si todos los alumnos son niños.
 - **Eliminar sesión:** botón al final del detalle con bottom sheet modal de confirmación estilizado
 - **Compartir clases entre colegas:** tablas `coach_colega` + `clase_compartida`. Al crear/editar clase aparece selector de colegas. Badge violeta `Compartida` en lista. Detalle muestra "Compartida con X" (dueño) o "Compartida por X" (colega). Ambas editan la misma clase.
+- **Desarrollo Profesional:** sección en `/home` con mini cursos. Curso 01 implementado ("Más herramientas, mejores clases"). Capítulos expandibles marcables como leídos, quiz final con nota guardada. Progreso individual por coach en tablas `progreso_curso` + `capitulo_leido`. Contenido fuente en `docs/courses/`. Cursos en `lib/cursos.ts`.
 
 ### 🔜 Pendiente
-- **Sección "Desarrollo Profesional":** mini cursos con capítulos marcables como leídos + quiz final con nota guardada. `/home` pasa a ser el hub (tip del día + cursos). Contenido hardcodeado en `lib/cursos.ts`. Tablas nuevas: `progreso_curso` y `capitulo_leido`. Diseñado el 2026-04-09, pendiente de implementar.
+- **Cursos 02, 03, 04:** Enseñar jugando / Biomecánica en el tenis / Psicología deportiva — orden definido, contenido pendiente de escribir
 - Ideas futuras: progreso por técnica, selector de tema, PWA
 - Automatizar `/add-tip` con schedule (hoy es a demanda)
 
@@ -93,11 +94,14 @@ lib/
   supabase.ts             — cliente Supabase singleton (lazy init)
   types.ts                — tipos TypeScript de todas las entidades
   tips.ts                 — array de tips, getTipDelDia() (último del array) y getTipsAnteriores()
+  cursos.ts               — array de cursos con capítulos y quiz, getCurso(id)
 public/
   favicon.svg             — pelota de tenis amarilla (#ccff00)
 docs/
   tips-bank.md            — banco de tips categorizados (LIBRE/USADO)
   tips-history.md         — registro de tips ya publicados
+  courses/
+    01-mas-herramientas-mejores-clases.md  — fuente de verdad del Curso 01
 ```
 
 ---
@@ -114,6 +118,8 @@ Etapa              → pasos de una clase: calentamiento|drill|juego|fisico, ord
 Sesion             → evento real: grupo + clase? + fecha + hora? + estado: pendiente|finalizada|cancelada
 RegistroAlumno     → alumno en sesión: asistencia + nota 1-10
 ComentarioRegistro → comentarios cronológicos por registro (tabla separada)
+ProgresoCurso      → coach_id, curso_id, nota, fecha_completado (quiz finalizado)
+CapituloLeido      → coach_id, curso_id, capitulo_idx (progreso individual por capítulo)
 ```
 
 ---

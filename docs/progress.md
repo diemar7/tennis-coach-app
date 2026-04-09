@@ -136,33 +136,40 @@
 - Escala: agregar más colegas solo requiere insertar en `coach_colega`
 - RLS: políticas sin loops circulares — `clase_compartida` y `usuarios` con acceso abierto a autenticados
 
+### Desarrollo Profesional ✅ (2026-04-09)
+
+Sección nueva en `/home` con mini cursos para coaches.
+
+**Implementado:**
+- `lib/cursos.ts` — array de cursos con capítulos y quiz, `getCurso(id)`
+- `/home/cursos/[id]` — detalle de curso: capítulos expandibles, marcar como leído, barra de progreso, quiz final con nota guardada y feedback
+- `/home` — sección "Desarrollo Profesional" con card por curso, barra de puntos y estado (No iniciado / X/N capítulos / Completado + nota)
+- Tablas Supabase: `progreso_curso` + `capitulo_leido` con RLS individual por coach
+- Migración: `add_cursos_progreso`
+- **Curso 01:** "Más herramientas, mejores clases" — 5 capítulos, 5 preguntas quiz. Fuente: `docs/courses/01-mas-herramientas-mejores-clases.md`
+- Progreso 100% individual: cada coach ve y edita solo el suyo
+
+**Plan de cursos definido:**
+| # | Título | Estado |
+|---|--------|--------|
+| 01 | Más herramientas, mejores clases | ✅ Implementado |
+| 02 | Enseñar jugando | 📝 Pendiente |
+| 03 | Biomecánica en el tenis | 📝 Pendiente |
+| 04 | Psicología deportiva | 📝 Pendiente |
+
+---
+
 ## Pendiente 🔜
 
-### Sección "Desarrollo Profesional" — diseñada, pendiente de implementar (2026-04-09)
+### Cursos 02, 03 y 04 — contenido a escribir
 
-Mini cursos para coaches con capítulos marcables como leídos y quiz final con nota guardada.
+Orden definido. Estructura igual al Curso 01: 5 capítulos + quiz. Fuente en `docs/courses/`. Se agregan a `lib/cursos.ts` cuando estén listos.
 
-**Decisiones tomadas:**
-- El tab "Inicio" pasa a llamarse algo como "Desarrollo" — `/home` se convierte en hub de crecimiento del coach (tip del día + cursos)
-- Contenido hardcodeado en `lib/cursos.ts` (igual que los tips) — no hay editor dentro de la app
-- Capítulos marcables a ritmo propio; quiz se habilita al completar todos los capítulos
-- Quiz único al final del curso, nota guardada, repetible
-- Solo para coaches (no para alumnos)
-
-**Modelo de datos a agregar en Supabase:**
-```
-progreso_curso   → coach_id, curso_id, nota, fecha_completado
-capitulo_leido   → coach_id, curso_id, capitulo_idx
-```
-
-**Vista de lista de cursos:**
-```
-[Táctica Moderna]      3/5 capítulos ●●●○○
-[Gestión de Grupos]    Completado ✓  Nota: 8/10
-[Desarrollo Juvenil]   No iniciado
-```
-
-**Próximo paso:** definir contenido del primer curso (tema, capítulos, preguntas) antes de codear.
+| # | Título | Idea central |
+|---|--------|-------------|
+| 02 | Enseñar jugando | Game-Based Learning, menos canasto, más juego como método |
+| 03 | Biomecánica en el tenis | Cadena cinética, por qué el cuerpo se mueve así |
+| 04 | Psicología deportiva | Mentalidad, presión, motivación del alumno |
 
 ---
 

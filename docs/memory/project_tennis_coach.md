@@ -56,6 +56,10 @@ Supabase proyecto: `vrdcjhdjctvkhadjqiao`, org Baseline (`spgyrvqpaewcjyoqdmap`)
 - Edición de fecha y hora en el detalle de sesión
 - RLS: admin tiene acceso completo de escritura en todas las tablas (migración `admin_full_write_access`)
 
-**Próximo paso:** implementar sección "Desarrollo Profesional" — mini cursos con capítulos marcables y quiz final. Diseño definido el 2026-04-09, pendiente de codear. Primero definir contenido del primer curso.
+**También implementado (2026-04-09):**
+- **Desarrollo Profesional:** sección en `/home` con mini cursos. Curso 01 "Más herramientas, mejores clases" — 5 capítulos expandibles, marcar como leído, quiz final con nota guardada. Progreso individual por coach. Tablas: `progreso_curso` + `capitulo_leido`. Fuente del contenido: `docs/courses/`.
+- Plan de 4 cursos definido: 01 implementado, 02 (Enseñar jugando), 03 (Biomecánica), 04 (Psicología deportiva) pendientes.
+
+**Próximo paso:** escribir y agregar Curso 02 — "Enseñar jugando".
 
 **How to apply:** Al retomar, leer CLAUDE.md del proyecto para contexto completo.
