@@ -58,6 +58,7 @@ App web para coaches de tenis independientes. Permite planificar clases, registr
 - **Compartir clases entre colegas:** tablas `coach_colega` + `clase_compartida`. Al crear/editar clase aparece selector de colegas. Badge violeta `Compartida` en lista. Detalle muestra "Compartida con X" (dueño) o "Compartida por X" (colega). Ambas editan la misma clase.
 
 ### 🔜 Pendiente
+- **Sección "Desarrollo Profesional":** mini cursos con capítulos marcables como leídos + quiz final con nota guardada. `/home` pasa a ser el hub (tip del día + cursos). Contenido hardcodeado en `lib/cursos.ts`. Tablas nuevas: `progreso_curso` y `capitulo_leido`. Diseñado el 2026-04-09, pendiente de implementar.
 - Ideas futuras: progreso por técnica, selector de tema, PWA
 - Automatizar `/add-tip` con schedule (hoy es a demanda)
 

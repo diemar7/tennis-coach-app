@@ -138,6 +138,34 @@
 
 ## Pendiente 🔜
 
+### Sección "Desarrollo Profesional" — diseñada, pendiente de implementar (2026-04-09)
+
+Mini cursos para coaches con capítulos marcables como leídos y quiz final con nota guardada.
+
+**Decisiones tomadas:**
+- El tab "Inicio" pasa a llamarse algo como "Desarrollo" — `/home` se convierte en hub de crecimiento del coach (tip del día + cursos)
+- Contenido hardcodeado en `lib/cursos.ts` (igual que los tips) — no hay editor dentro de la app
+- Capítulos marcables a ritmo propio; quiz se habilita al completar todos los capítulos
+- Quiz único al final del curso, nota guardada, repetible
+- Solo para coaches (no para alumnos)
+
+**Modelo de datos a agregar en Supabase:**
+```
+progreso_curso   → coach_id, curso_id, nota, fecha_completado
+capitulo_leido   → coach_id, curso_id, capitulo_idx
+```
+
+**Vista de lista de cursos:**
+```
+[Táctica Moderna]      3/5 capítulos ●●●○○
+[Gestión de Grupos]    Completado ✓  Nota: 8/10
+[Desarrollo Juvenil]   No iniciado
+```
+
+**Próximo paso:** definir contenido del primer curso (tema, capítulos, preguntas) antes de codear.
+
+---
+
 ### Ideas futuras (fuera de v1)
 - Progreso por técnica por alumno (la base está: `tecnica` en clases + `nota` en registros)
 - Selector de tema (polvo de ladrillo / cancha azul)

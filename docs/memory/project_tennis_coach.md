@@ -56,6 +56,6 @@ Supabase proyecto: `vrdcjhdjctvkhadjqiao`, org Baseline (`spgyrvqpaewcjyoqdmap`)
 - Edición de fecha y hora en el detalle de sesión
 - RLS: admin tiene acceso completo de escritura en todas las tablas (migración `admin_full_write_access`)
 
-**Próximo paso:** por definir — v1 completa.
+**Próximo paso:** implementar sección "Desarrollo Profesional" — mini cursos con capítulos marcables y quiz final. Diseño definido el 2026-04-09, pendiente de codear. Primero definir contenido del primer curso.
 
 **How to apply:** Al retomar, leer CLAUDE.md del proyecto para contexto completo.
