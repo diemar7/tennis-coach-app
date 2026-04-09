@@ -20,6 +20,13 @@ export const TIPS: Tip[] = [
     cuerpo:
       'La práctica bloqueada (repetir el mismo golpe en las mismas condiciones) da sensación de mejora rápida, pero los resultados en el partido son pobres. La práctica variable —mezclando tipos de golpes, direcciones y situaciones sin previo aviso— genera más errores al principio pero una retención mucho mayor. El cerebro aprende mejor cuando tiene que resolver pequeños problemas en cada pelota, no cuando está en piloto automático.',
   },
+  {
+    id: 3,
+    categoria: 'Metodología',
+    titulo: 'Jugá primero, corregí después',
+    cuerpo:
+      'Antes de cualquier corrección técnica, dejá que el alumno juegue el punto o el drill completo. Interrumpir el movimiento constantemente fragmenta el aprendizaje motor y genera dependencia del coach. La regla práctica: máximo una corrección por turno, elegida según lo que más limita al jugador en ese momento. Menos feedback, más calidad de aprendizaje.',
+  },
 ]
 
 export function getTipDelDia(): Tip {

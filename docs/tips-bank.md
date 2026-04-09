@@ -25,7 +25,7 @@ Fuentes: ITF Coaching & Sport Science Review · Tennis Australia · USTA · Mour
 
 ---
 
-### 003 — El juego primero, la corrección después `[LIBRE]`
+### 003 — El juego primero, la corrección después `[USADO]`
 **Categoría:** Metodología  
 **Título:** Jugá primero, corregí después  
 **Cuerpo:** Antes de cualquier corrección técnica, dejá que el alumno juegue el punto o el drill completo. Interrumpir el movimiento constantemente fragmenta el aprendizaje motor y genera dependencia del coach. La regla práctica: máximo una corrección por turno, elegida según lo que más limita al jugador en ese momento. Menos feedback, más calidad de aprendizaje.  
