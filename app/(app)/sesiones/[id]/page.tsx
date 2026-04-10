@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
-import { Sesion, RegistroAlumno, ComentarioRegistro, AsistenciaTipo, SesionEstado, Clase } from '@/lib/types'
+import { Sesion, RegistroAlumno, ComentarioRegistro, AsistenciaTipo, SesionEstado, Clase, Etapa } from '@/lib/types'
 
 type RegistroConAlumno = RegistroAlumno & {
   alumno: { id: string; nombre: string; apellido: string }
@@ -42,6 +42,8 @@ export default function DetalleSesionPage() {
   const [mostrarCambioClase, setMostrarCambioClase] = useState(false)
   const [mostrarCambioFecha, setMostrarCambioFecha] = useState(false)
   const [mostrarConfirmEliminar, setMostrarConfirmEliminar] = useState(false)
+  const [etapasClase, setEtapasClase] = useState<Etapa[]>([])
+  const [mostrarEtapas, setMostrarEtapas] = useState(false)
   const [editFecha, setEditFecha] = useState('')
   const [editHora, setEditHora] = useState('')
 
@@ -66,6 +68,15 @@ export default function DetalleSesionPage() {
     if (!s) { setLoading(false); return }
     setSesion(s)
     setClases(cs ?? [])
+
+    if (s.clase_id) {
+      const { data: etapas } = await supabase
+        .from('etapas')
+        .select('*')
+        .eq('clase_id', s.clase_id)
+        .order('orden')
+      setEtapasClase(etapas ?? [])
+    }
 
     // Si la sesión es pendiente, sincronizar alumnos del grupo
     if (s.estado === 'pendiente') {
@@ -180,6 +191,18 @@ export default function DetalleSesionPage() {
       .single()
     if (s) setSesion(s)
     setMostrarCambioClase(false)
+    setMostrarEtapas(false)
+
+    if (claseId) {
+      const { data: etapas } = await supabase
+        .from('etapas')
+        .select('*')
+        .eq('clase_id', claseId)
+        .order('orden')
+      setEtapasClase(etapas ?? [])
+    } else {
+      setEtapasClase([])
+    }
   }
 
   if (loading) return <div className="px-4 pt-6"><p style={{ color: 'var(--color-text-muted)', fontSize: 14 }}>Cargando...</p></div>
@@ -302,9 +325,47 @@ export default function DetalleSesionPage() {
             </button>
           </div>
           {sesion.clase_id ? (
-            <p style={{ fontSize: 14, color: 'var(--color-text-primary)', marginTop: 2 }}>
-              {(sesion.clase as any)?.titulo}
-            </p>
+            <div>
+              <p style={{ fontSize: 14, color: 'var(--color-text-primary)', marginTop: 2 }}>
+                {(sesion.clase as any)?.titulo}
+              </p>
+              {etapasClase.length > 0 && (
+                <button
+                  onClick={() => setMostrarEtapas(v => !v)}
+                  style={{ fontSize: 12, color: 'var(--color-accent)', fontWeight: 500, marginTop: 6, display: 'flex', alignItems: 'center', gap: 4 }}
+                >
+                  <svg
+                    width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                    style={{ transform: mostrarEtapas ? 'rotate(90deg)' : 'none', transition: 'transform 0.2s' }}
+                  >
+                    <path d="M9 18l6-6-6-6" />
+                  </svg>
+                  {mostrarEtapas ? 'Ocultar clase' : 'Ver clase'}
+                </button>
+              )}
+              {mostrarEtapas && (
+                <div className="flex flex-col gap-1.5" style={{ marginTop: 10 }}>
+                  {etapasClase.map((etapa, i) => (
+                    <div key={etapa.id} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
+                      <span className={`badge badge-${etapa.tipo}`} style={{ flexShrink: 0, marginTop: 1 }}>
+                        {etapa.tipo.charAt(0).toUpperCase() + etapa.tipo.slice(1)}
+                      </span>
+                      <div style={{ flex: 1 }}>
+                        <p style={{ fontSize: 13, color: 'var(--color-text-primary)', lineHeight: 1.4 }}>
+                          {etapa.descripcion}
+                        </p>
+                        {etapa.duracion_minutos && (
+                          <p style={{ fontSize: 11, color: 'var(--color-text-muted)', marginTop: 2 }}>
+                            {etapa.duracion_minutos} min
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           ) : (
             <p style={{ fontSize: 13, color: 'var(--color-text-muted)', marginTop: 2 }}>Sin clase asignada</p>
           )}
