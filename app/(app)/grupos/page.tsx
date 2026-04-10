@@ -13,6 +13,7 @@ export default function GruposPage() {
   const router = useRouter()
   const [grupos, setGrupos] = useState<GrupoConNinos[]>([])
   const [loading, setLoading] = useState(true)
+  const [busqueda, setBusqueda] = useState('')
 
   useEffect(() => {
     async function load() {
@@ -42,8 +43,12 @@ export default function GruposPage() {
     load()
   }, [])
 
-  const activos = grupos.filter(g => g.activo)
-  const archivados = grupos.filter(g => !g.activo)
+  const gruposFiltrados = grupos.filter(g => {
+    if (!busqueda.trim()) return true
+    return g.nombre.toLowerCase().includes(busqueda.toLowerCase())
+  })
+  const activos = gruposFiltrados.filter(g => g.activo)
+  const archivados = gruposFiltrados.filter(g => !g.activo)
 
   return (
     <div className="px-4 pt-6 pb-4">
@@ -58,10 +63,20 @@ export default function GruposPage() {
         </button>
       </div>
 
+      <input
+        className="input mb-4"
+        placeholder="Buscar grupo..."
+        value={busqueda}
+        onChange={e => setBusqueda(e.target.value)}
+        style={{ fontSize: 14 }}
+      />
+
       {loading ? (
         <p style={{ color: 'var(--color-text-muted)', fontSize: 14 }}>Cargando...</p>
       ) : grupos.length === 0 ? (
         <p style={{ color: 'var(--color-text-muted)', fontSize: 14 }}>No hay grupos todavía.</p>
+      ) : gruposFiltrados.length === 0 ? (
+        <p style={{ color: 'var(--color-text-muted)', fontSize: 14 }}>No hay grupos que coincidan con la búsqueda.</p>
       ) : (
         <div className="flex flex-col gap-4">
           {activos.length > 0 && (

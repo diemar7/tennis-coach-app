@@ -28,6 +28,7 @@ export default function AlumnosPage() {
   const [alumnos, setAlumnos] = useState<Alumno[]>([])
   const [loading, setLoading] = useState(true)
   const [soloActivos, setSoloActivos] = useState(true)
+  const [busqueda, setBusqueda] = useState('')
 
   useEffect(() => {
     async function load() {
@@ -42,7 +43,16 @@ export default function AlumnosPage() {
     load()
   }, [])
 
-  const filtrados = alumnos.filter(a => soloActivos ? a.activo : true)
+  const filtrados = alumnos
+    .filter(a => soloActivos ? a.activo : true)
+    .filter(a => {
+      if (!busqueda.trim()) return true
+      const q = busqueda.toLowerCase()
+      return (
+        a.nombre.toLowerCase().includes(q) ||
+        a.apellido.toLowerCase().includes(q)
+      )
+    })
 
   return (
     <div className="px-4 pt-6 pb-4">
@@ -59,6 +69,15 @@ export default function AlumnosPage() {
           + Nuevo
         </button>
       </div>
+
+      {/* Buscador */}
+      <input
+        className="input mb-3"
+        placeholder="Buscar alumno..."
+        value={busqueda}
+        onChange={e => setBusqueda(e.target.value)}
+        style={{ fontSize: 14 }}
+      />
 
       {/* Filtro activos/todos */}
       <div className="flex gap-2 mb-4">
@@ -90,7 +109,9 @@ export default function AlumnosPage() {
       {loading ? (
         <p style={{ color: 'var(--color-text-muted)', fontSize: 14 }}>Cargando...</p>
       ) : filtrados.length === 0 ? (
-        <p style={{ color: 'var(--color-text-muted)', fontSize: 14 }}>No hay alumnos todavía.</p>
+        <p style={{ color: 'var(--color-text-muted)', fontSize: 14 }}>
+          {busqueda.trim() ? 'No hay alumnos que coincidan con la búsqueda.' : 'No hay alumnos todavía.'}
+        </p>
       ) : (
         <div className="flex flex-col gap-2">
           {filtrados.map(alumno => (
