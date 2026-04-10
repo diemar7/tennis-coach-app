@@ -58,8 +58,13 @@ Supabase proyecto: `vrdcjhdjctvkhadjqiao`, org Baseline (`spgyrvqpaewcjyoqdmap`)
 
 **También implementado (2026-04-09):**
 - **Desarrollo Profesional:** sección en `/home` con mini cursos. Curso 01 "Más herramientas, mejores clases" — 5 capítulos expandibles, marcar como leído, quiz final con nota guardada. Progreso individual por coach. Tablas: `progreso_curso` + `capitulo_leido`. Fuente del contenido: `docs/courses/`.
-- Plan de 4 cursos definido: 01 implementado, 02 (Enseñar jugando), 03 (Biomecánica), 04 (Psicología deportiva) pendientes.
 
-**Próximo paso:** escribir y agregar Curso 02 — "Enseñar jugando".
+**También implementado (2026-04-10):**
+- **Tip 004** agregado: "El ambiente entrena tanto como vos" (Metodología — Dinámica Ecológica). 4 tips en la app, 18 libres.
+- **Ver etapas en detalle de sesión:** botón "Ver clase" colapsable debajo del nombre de la clase asignada. Muestra etapas con badge de tipo, descripción y duración. Se actualiza al cambiar la clase.
+- **Curso 02** — "Enseñar jugando": 6 capítulos + quiz de 7 preguntas. GBL, interferencia contextual, diseño de situaciones por nivel, rol del coach, 3 clases modelo. Fuente: `docs/courses/02-ensenar-jugando.md`.
+- **Buscador en Alumnos y Grupos:** filtrado en tiempo real en el cliente (sin llamadas extra a Supabase). Alumnos: por nombre/apellido + respeta filtro activos/todos. Grupos: por nombre + respeta separación activos/archivados.
+
+**Próximo paso:** Curso 03 — "Biomecánica en el tenis".
 
 **How to apply:** Al retomar, leer CLAUDE.md del proyecto para contexto completo.

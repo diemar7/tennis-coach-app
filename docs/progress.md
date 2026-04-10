@@ -147,27 +147,42 @@ Sección nueva en `/home` con mini cursos para coaches.
 - Tablas Supabase: `progreso_curso` + `capitulo_leido` con RLS individual por coach
 - Migración: `add_cursos_progreso`
 - **Curso 01:** "Más herramientas, mejores clases" — 5 capítulos, 5 preguntas quiz. Fuente: `docs/courses/01-mas-herramientas-mejores-clases.md`
+- **Curso 02:** "Enseñar jugando" — 6 capítulos, 7 preguntas quiz. Fuente: `docs/courses/02-ensenar-jugando.md` ✅ (2026-04-10)
 - Progreso 100% individual: cada coach ve y edita solo el suyo
 
-**Plan de cursos definido:**
+**Plan de cursos:**
 | # | Título | Estado |
 |---|--------|--------|
 | 01 | Más herramientas, mejores clases | ✅ Implementado |
-| 02 | Enseñar jugando | 📝 Pendiente |
+| 02 | Enseñar jugando | ✅ Implementado |
 | 03 | Biomecánica en el tenis | 📝 Pendiente |
 | 04 | Psicología deportiva | 📝 Pendiente |
 
 ---
 
+### Ver etapas de clase en detalle de sesión ✅ (2026-04-10)
+- Si la sesión tiene una clase asignada y esa clase tiene etapas, aparece un botón "Ver clase" debajo del título
+- Al tocar despliega las etapas con badge de tipo (calentamiento/drill/juego/físico), descripción y duración
+- Se actualiza automáticamente si se cambia la clase asignada desde el mismo detalle
+
+### Buscador en Alumnos y Grupos ✅ (2026-04-10)
+- Input de búsqueda en tiempo real al tope de las listas
+- Alumnos: busca por nombre y apellido, respeta el filtro activos/todos
+- Grupos: busca por nombre, respeta la separación activos/archivados
+- Sin llamadas extra a Supabase — filtra en el cliente
+
+### Tips ✅ (2026-04-10)
+- Tip 004 agregado: "El ambiente entrena tanto como vos" (Metodología — Dinámica Ecológica)
+- **Tips en la app:** 4 (001–004 usados, 18 libres restantes)
+
+---
+
 ## Pendiente 🔜
 
-### Cursos 02, 03 y 04 — contenido a escribir
-
-Orden definido. Estructura igual al Curso 01: 5 capítulos + quiz. Fuente en `docs/courses/`. Se agregan a `lib/cursos.ts` cuando estén listos.
+### Cursos 03 y 04 — contenido a escribir
 
 | # | Título | Idea central |
 |---|--------|-------------|
-| 02 | Enseñar jugando | Game-Based Learning, menos canasto, más juego como método |
 | 03 | Biomecánica en el tenis | Cadena cinética, por qué el cuerpo se mueve así |
 | 04 | Psicología deportiva | Mentalidad, presión, motivación del alumno |
 

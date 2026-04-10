@@ -56,10 +56,12 @@ App web para coaches de tenis independientes. Permite planificar clases, registr
 - **Distinción niños/adultos:** campo `es_nino` en `alumnos`, enum `nivel_alumno` ampliado (presco, escuela, entrenamiento). Toggle Adulto/Niño en crear y editar alumno, niveles dinámicos según categoría. Badge azul `Niño` en lista y ficha. Lista de grupos: badge `Niños` automático si todos los alumnos son niños.
 - **Eliminar sesión:** botón al final del detalle con bottom sheet modal de confirmación estilizado
 - **Compartir clases entre colegas:** tablas `coach_colega` + `clase_compartida`. Al crear/editar clase aparece selector de colegas. Badge violeta `Compartida` en lista. Detalle muestra "Compartida con X" (dueño) o "Compartida por X" (colega). Ambas editan la misma clase.
-- **Desarrollo Profesional:** sección en `/home` con mini cursos. Curso 01 implementado ("Más herramientas, mejores clases"). Capítulos expandibles marcables como leídos, quiz final con nota guardada. Progreso individual por coach en tablas `progreso_curso` + `capitulo_leido`. Contenido fuente en `docs/courses/`. Cursos en `lib/cursos.ts`.
+- **Desarrollo Profesional:** sección en `/home` con mini cursos. Curso 01 ("Más herramientas, mejores clases") y Curso 02 ("Enseñar jugando") implementados. Capítulos expandibles marcables como leídos, quiz final con nota guardada. Progreso individual por coach en tablas `progreso_curso` + `capitulo_leido`. Contenido fuente en `docs/courses/`. Cursos en `lib/cursos.ts`.
+- **Ver etapas en detalle de sesión:** botón "Ver clase" colapsable bajo el nombre de la clase asignada. Muestra etapas (badge tipo + descripción + duración). Se actualiza al cambiar la clase.
+- **Buscador en Alumnos y Grupos:** input de búsqueda en tiempo real al tope de cada lista. Sin llamadas extra a Supabase.
 
 ### 🔜 Pendiente
-- **Cursos 02, 03, 04:** Enseñar jugando / Biomecánica en el tenis / Psicología deportiva — orden definido, contenido pendiente de escribir
+- **Cursos 03, 04:** Biomecánica en el tenis / Psicología deportiva — contenido pendiente de escribir
 - Ideas futuras: progreso por técnica, selector de tema, PWA
 - Automatizar `/add-tip` con schedule (hoy es a demanda)
 
@@ -102,6 +104,7 @@ docs/
   tips-history.md         — registro de tips ya publicados
   courses/
     01-mas-herramientas-mejores-clases.md  — fuente de verdad del Curso 01
+    02-ensenar-jugando.md                  — fuente de verdad del Curso 02
 ```
 
 ---
