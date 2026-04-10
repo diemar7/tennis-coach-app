@@ -33,7 +33,7 @@ Fuentes: ITF Coaching & Sport Science Review · Tennis Australia · USTA · Mour
 
 ---
 
-### 004 — Ecología del aprendizaje `[LIBRE]`
+### 004 — Ecología del aprendizaje `[USADO]`
 **Categoría:** Metodología  
 **Título:** El ambiente entrena tanto como vos  
 **Cuerpo:** El enfoque de Dinámica Ecológica plantea que el jugador aprende adaptándose a las restricciones del entorno: el espacio, la pelota, el oponente, la presión del marcador. En lugar de explicar cómo hacer un golpe, modificá el juego para que el golpe correcto sea la solución más natural. Por ejemplo, achicá la cancha para forzar el topspin, o jugá con puntaje real para que practiquen bajo presión real.  

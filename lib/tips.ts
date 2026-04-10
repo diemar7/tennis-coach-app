@@ -27,6 +27,13 @@ export const TIPS: Tip[] = [
     cuerpo:
       'Antes de cualquier corrección técnica, dejá que el alumno juegue el punto o el drill completo. Interrumpir el movimiento constantemente fragmenta el aprendizaje motor y genera dependencia del coach. La regla práctica: máximo una corrección por turno, elegida según lo que más limita al jugador en ese momento. Menos feedback, más calidad de aprendizaje.',
   },
+  {
+    id: 4,
+    categoria: 'Metodología',
+    titulo: 'El ambiente entrena tanto como vos',
+    cuerpo:
+      'El enfoque de Dinámica Ecológica plantea que el jugador aprende adaptándose a las restricciones del entorno: el espacio, la pelota, el oponente, la presión del marcador. En lugar de explicar cómo hacer un golpe, modificá el juego para que el golpe correcto sea la solución más natural. Por ejemplo, achicá la cancha para forzar el topspin, o jugá con puntaje real para que practiquen bajo presión real.',
+  },
 ]
 
 export function getTipDelDia(): Tip {
