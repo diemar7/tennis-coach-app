@@ -44,6 +44,8 @@ export default function SesionesPage() {
   const [sesiones, setSesiones] = useState<SesionConRels[]>([])
   const [loading, setLoading] = useState(true)
   const [semanaBase, setSemanaBase] = useState<Date>(() => startOfWeek(new Date()))
+  const [repitiendo, setRepitiendo] = useState(false)
+  const [mostrarConfirmRepetir, setMostrarConfirmRepetir] = useState(false)
 
   useEffect(() => {
     async function load() {
@@ -73,6 +75,57 @@ export default function SesionesPage() {
   }
 
   const hoyStr = toLocalDateStr(new Date())
+
+  async function repetirSemana() {
+    if (sesionesEnSemana.length === 0) return
+    setRepitiendo(true)
+    const supabase = createClient()
+
+    for (const s of sesionesEnSemana) {
+      const nuevaFecha = toLocalDateStr(addDays(new Date(s.fecha + 'T12:00:00'), 7))
+
+      const { data: nueva } = await supabase
+        .from('sesiones')
+        .insert({
+          grupo_id: s.grupo_id,
+          clase_id: null,
+          fecha: nuevaFecha,
+          hora: s.hora ?? null,
+          estado: 'pendiente',
+        })
+        .select('id')
+        .single()
+
+      if (nueva) {
+        // Crear registros automáticos para los alumnos del grupo
+        const { data: alumnosGrupo } = await supabase
+          .from('alumno_grupo')
+          .select('alumno_id')
+          .eq('grupo_id', s.grupo_id)
+
+        if (alumnosGrupo && alumnosGrupo.length > 0) {
+          await supabase.from('registros_alumno').insert(
+            alumnosGrupo.map((ag: { alumno_id: string }) => ({
+              sesion_id: nueva.id,
+              alumno_id: ag.alumno_id,
+              asistencia: 'presente',
+            }))
+          )
+        }
+      }
+    }
+
+    // Navegar a la semana siguiente y recargar
+    setSemanaBase(prev => addDays(prev, 7))
+    const { data } = await supabase
+      .from('sesiones')
+      .select('*, grupo:grupos(nombre), clase:clases(titulo, tecnica)')
+      .order('fecha', { ascending: true })
+      .order('hora', { ascending: true, nullsFirst: false })
+    setSesiones(data ?? [])
+    setRepitiendo(false)
+    setMostrarConfirmRepetir(false)
+  }
 
   const labelSemana = () => {
     const ini = diasSemana[0]
@@ -121,6 +174,30 @@ export default function SesionesPage() {
           </svg>
         </button>
       </div>
+
+      {/* Repetir semana */}
+      {!loading && sesionesEnSemana.length > 0 && (
+        <button
+          onClick={() => setMostrarConfirmRepetir(true)}
+          style={{
+            fontSize: 12,
+            color: 'var(--color-accent)',
+            fontWeight: 500,
+            marginBottom: 12,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 4,
+          }}
+        >
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M17 1l4 4-4 4" />
+            <path d="M3 11V9a4 4 0 0 1 4-4h14" />
+            <path d="M7 23l-4-4 4-4" />
+            <path d="M21 13v2a4 4 0 0 1-4 4H3" />
+          </svg>
+          Repetir semana
+        </button>
+      )}
 
       {loading ? (
         <p style={{ color: 'var(--color-text-muted)', fontSize: 14 }}>Cargando...</p>
@@ -186,6 +263,61 @@ export default function SesionesPage() {
               </div>
             )
           })}
+        </div>
+      )}
+      {/* Modal confirmación repetir semana */}
+      {mostrarConfirmRepetir && (
+        <div
+          style={{
+            position: 'fixed', inset: 0, zIndex: 50,
+            backgroundColor: 'rgba(0,0,0,0.45)',
+            display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+          }}
+          onClick={() => setMostrarConfirmRepetir(false)}
+        >
+          <div
+            onClick={e => e.stopPropagation()}
+            style={{
+              backgroundColor: 'var(--color-bg-card)',
+              borderRadius: '16px 16px 0 0',
+              padding: '24px 20px 36px',
+              width: '100%',
+              maxWidth: 480,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 16,
+            }}
+          >
+            <div style={{ textAlign: 'center' }}>
+              <p style={{ fontSize: 16, fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 6 }}>
+                Repetir semana
+              </p>
+              <p style={{ fontSize: 13, color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
+                Se van a crear {sesionesEnSemana.length} {sesionesEnSemana.length === 1 ? 'sesión' : 'sesiones'} en la semana siguiente, con el mismo grupo y horario, sin clase asignada.
+              </p>
+            </div>
+            <button
+              onClick={repetirSemana}
+              disabled={repitiendo}
+              className="btn-primary"
+              style={{ padding: '13px', fontSize: 15, opacity: repitiendo ? 0.6 : 1 }}
+            >
+              {repitiendo ? 'Creando...' : 'Confirmar'}
+            </button>
+            <button
+              onClick={() => setMostrarConfirmRepetir(false)}
+              style={{
+                backgroundColor: 'var(--color-bg-surface)',
+                color: 'var(--color-text-secondary)',
+                borderRadius: 10,
+                padding: '13px',
+                fontSize: 15,
+                fontWeight: 500,
+              }}
+            >
+              Cancelar
+            </button>
+          </div>
         </div>
       )}
     </div>
