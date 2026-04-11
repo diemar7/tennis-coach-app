@@ -50,9 +50,12 @@ export default function SesionesPage() {
   useEffect(() => {
     async function load() {
       const supabase = createClient()
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) return
       const { data } = await supabase
         .from('sesiones')
         .select('*, grupo:grupos(nombre), clase:clases(titulo, tecnica)')
+        .eq('coach_id', user.id)
         .order('fecha', { ascending: true })
         .order('hora', { ascending: true, nullsFirst: false })
       setSesiones(data ?? [])
