@@ -87,6 +87,7 @@ export default function SesionesPage() {
       const { data: nueva } = await supabase
         .from('sesiones')
         .insert({
+          coach_id: s.coach_id,
           grupo_id: s.grupo_id,
           clase_id: null,
           fecha: nuevaFecha,
