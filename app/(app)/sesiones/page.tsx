@@ -66,7 +66,6 @@ export default function SesionesPage() {
   const finStr = toLocalDateStr(diasSemana[6])
 
   const sesionesEnSemana = sesiones.filter(s => s.fecha >= inicioStr && s.fecha <= finStr)
-  const sesionesPendientes = sesionesEnSemana.filter(s => s.estado === 'pendiente')
 
   // Agrupar por fecha
   const porFecha: Record<string, SesionConRels[]> = {}
@@ -78,11 +77,11 @@ export default function SesionesPage() {
   const hoyStr = toLocalDateStr(new Date())
 
   async function repetirSemana() {
-    if (sesionesPendientes.length === 0) return
+    if (sesionesEnSemana.length === 0) return
     setRepitiendo(true)
     const supabase = createClient()
 
-    for (const s of sesionesPendientes) {
+    for (const s of sesionesEnSemana) {
       const nuevaFecha = toLocalDateStr(addDays(new Date(s.fecha + 'T12:00:00'), 7))
 
       const { data: nueva } = await supabase
@@ -177,7 +176,7 @@ export default function SesionesPage() {
       </div>
 
       {/* Repetir semana */}
-      {!loading && sesionesPendientes.length > 0 && (
+      {!loading && sesionesEnSemana.length > 0 && (
         <button
           onClick={() => setMostrarConfirmRepetir(true)}
           style={{
@@ -294,7 +293,7 @@ export default function SesionesPage() {
                 Repetir semana
               </p>
               <p style={{ fontSize: 13, color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
-                Se van a crear {sesionesPendientes.length} {sesionesPendientes.length === 1 ? 'sesión' : 'sesiones'} pendientes en la semana siguiente, con el mismo grupo y horario, sin clase asignada.
+                Se van a crear {sesionesEnSemana.length} {sesionesEnSemana.length === 1 ? 'sesión' : 'sesiones'} en la semana siguiente, con el mismo grupo y horario, en estado pendiente y sin clase asignada.
               </p>
             </div>
             <button
