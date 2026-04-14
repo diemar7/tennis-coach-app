@@ -59,6 +59,8 @@ App web para coaches de tenis independientes. Permite planificar clases, registr
 - **Desarrollo Profesional:** sección en `/home` con mini cursos. Curso 01 ("Más herramientas, mejores clases") y Curso 02 ("Enseñar jugando") implementados. Capítulos expandibles marcables como leídos, quiz final con nota guardada. Progreso individual por coach en tablas `progreso_curso` + `capitulo_leido`. Contenido fuente en `docs/courses/`. Cursos en `lib/cursos.ts`.
 - **Ver etapas en detalle de sesión:** botón "Ver clase" colapsable bajo el nombre de la clase asignada. Muestra etapas (badge tipo + descripción + duración). Se actualiza al cambiar la clase.
 - **Buscador en Alumnos y Grupos:** input de búsqueda en tiempo real al tope de cada lista. Sin llamadas extra a Supabase.
+- **Repetir semana:** botón en lista de sesiones que copia todas las sesiones de la semana a la semana siguiente (mismo grupo/hora, estado pendiente, sin clase, con registros de alumnos automáticos).
+- **Sesiones filtra por coach propio:** cada usuario ve solo sus sesiones (`coach_id = user.id`), sin excepción para admin. Si Diego necesita ver datos de otro coach, se hace por SQL directo.
 
 ### 🔜 Pendiente
 - **Cursos 03, 04:** Biomecánica en el tenis / Psicología deportiva — contenido pendiente de escribir

@@ -65,6 +65,11 @@ Supabase proyecto: `vrdcjhdjctvkhadjqiao`, org Baseline (`spgyrvqpaewcjyoqdmap`)
 - **Curso 02** — "Enseñar jugando": 6 capítulos + quiz de 7 preguntas. GBL, interferencia contextual, diseño de situaciones por nivel, rol del coach, 3 clases modelo. Fuente: `docs/courses/02-ensenar-jugando.md`.
 - **Buscador en Alumnos y Grupos:** filtrado en tiempo real en el cliente (sin llamadas extra a Supabase). Alumnos: por nombre/apellido + respeta filtro activos/todos. Grupos: por nombre + respeta separación activos/archivados.
 
+**También implementado (2026-04-14):**
+- **Repetir semana:** botón en lista de sesiones que copia todas las sesiones de la semana visible a la siguiente (mismo grupo/hora, estado pendiente, sin clase). Con confirmación via bottom sheet. Genera registros de alumnos automáticamente.
+- **Fix repetir semana:** incluir `coach_id` en el insert — faltaba y causaba fallo silencioso.
+- **Fix sesiones por coach propio:** la lista de sesiones ahora filtra siempre por `coach_id = user.id`, sin excepción para admin. Decisión: el admin usa SQL directo si necesita ver datos de otro coach.
+
 **Próximo paso:** Curso 03 — "Biomecánica en el tenis".
 
 **How to apply:** Al retomar, leer CLAUDE.md del proyecto para contexto completo.

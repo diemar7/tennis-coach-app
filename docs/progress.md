@@ -175,6 +175,19 @@ Sección nueva en `/home` con mini cursos para coaches.
 - Tip 004 agregado: "El ambiente entrena tanto como vos" (Metodología — Dinámica Ecológica)
 - **Tips en la app:** 4 (001–004 usados, 18 libres restantes)
 
+### Repetir semana ✅ (2026-04-14)
+- Botón "Repetir semana" en la lista semanal de sesiones (aparece solo si hay sesiones en la semana visible)
+- Crea todas las sesiones de la semana en la semana siguiente: mismo grupo, misma hora, sin clase asignada, estado pendiente
+- Genera los registros de alumnos automáticamente por cada sesión copiada
+- Confirmación via bottom sheet antes de ejecutar
+- Después de crear navega automáticamente a la semana siguiente
+- Fix: incluir `coach_id` en el insert (faltaba, causaba fallo silencioso en Supabase)
+
+### Fix: sesiones filtra siempre por coach propio ✅ (2026-04-14)
+- Antes el admin (Diego) veía las sesiones de todos los coaches mezcladas
+- Ahora la query filtra por `coach_id = user.id` sin excepción de rol
+- Decisión: el admin usa SQL directo si necesita ver datos de otro coach para debugging
+
 ---
 
 ## Pendiente 🔜
