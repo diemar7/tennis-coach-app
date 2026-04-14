@@ -34,6 +34,13 @@ export const TIPS: Tip[] = [
     cuerpo:
       'El enfoque de Dinámica Ecológica plantea que el jugador aprende adaptándose a las restricciones del entorno: el espacio, la pelota, el oponente, la presión del marcador. En lugar de explicar cómo hacer un golpe, modificá el juego para que el golpe correcto sea la solución más natural. Por ejemplo, achicá la cancha para forzar el topspin, o jugá con puntaje real para que practiquen bajo presión real.',
   },
+  {
+    id: 5,
+    categoria: 'Táctica',
+    titulo: 'El patrón que más puntos te da en el fondo',
+    cuerpo:
+      'El patrón "2-1" es el más efectivo para jugadores de base: primer golpe profundo para empujar al rival atrás, segundo golpe cruzado para abrirle la cancha, tercer golpe al espacio creado para el punto. Enseñalo como una secuencia de intenciones, no de técnicas. Cuando el alumno entiende el "para qué" de cada pelota, empieza a tomar decisiones propias dentro del patrón.',
+  },
 ]
 
 export function getTipDelDia(): Tip {

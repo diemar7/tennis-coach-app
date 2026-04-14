@@ -43,7 +43,7 @@ Fuentes: ITF Coaching & Sport Science Review · Tennis Australia · USTA · Mour
 
 ## TÁCTICA
 
-### 005 — El patrón 2-1 `[LIBRE]`
+### 005 — El patrón 2-1 `[USADO]`
 **Categoría:** Táctica  
 **Título:** El patrón que más puntos te da en el fondo  
 **Cuerpo:** El patrón "2-1" es el más efectivo para jugadores de base: primer golpe profundo para empujar al rival atrás, segundo golpe cruzado para abrirle la cancha, tercer golpe al espacio creado para el punto. Enseñalo como una secuencia de intenciones, no de técnicas. Cuando el alumno entiende el "para qué" de cada pelota, empieza a tomar decisiones propias dentro del patrón.  
