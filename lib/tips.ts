@@ -41,6 +41,13 @@ export const TIPS: Tip[] = [
     cuerpo:
       'El patrón "2-1" es el más efectivo para jugadores de base: primer golpe profundo para empujar al rival atrás, segundo golpe cruzado para abrirle la cancha, tercer golpe al espacio creado para el punto. Enseñalo como una secuencia de intenciones, no de técnicas. Cuando el alumno entiende el "para qué" de cada pelota, empieza a tomar decisiones propias dentro del patrón.',
   },
+  {
+    id: 6,
+    categoria: 'Táctica',
+    titulo: 'Tres zonas, tres estrategias distintas',
+    cuerpo:
+      'Enseñá a tus alumnos que la cancha tiene tres zonas con lógicas diferentes. Zona defensiva (más de 2 metros atrás de la línea de base): pelota alta, con margen, tiempo para recuperar. Zona neutral (cerca de la línea de base): pelota profunda, mantener el intercambio. Zona de ataque (dentro de la línea): pelota baja sobre la red, finalizá el punto. Saber en qué zona estás cambia completamente la decisión de cada golpe.',
+  },
 ]
 
 export function getTipDelDia(): Tip {

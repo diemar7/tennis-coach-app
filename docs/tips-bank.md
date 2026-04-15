@@ -51,7 +51,7 @@ Fuentes: ITF Coaching & Sport Science Review · Tennis Australia · USTA · Mour
 
 ---
 
-### 006 — Zonas de la cancha `[LIBRE]`
+### 006 — Zonas de la cancha `[USADO]`
 **Categoría:** Táctica  
 **Título:** Tres zonas, tres estrategias distintas  
 **Cuerpo:** Enseñá a tus alumnos que la cancha tiene tres zonas con lógicas diferentes. Zona defensiva (más de 2 metros atrás de la línea de base): pelota alta, con margen, tiempo para recuperar. Zona neutral (cerca de la línea de base): pelota profunda, mantener el intercambio. Zona de ataque (dentro de la línea): pelota baja sobre la red, finalizá el punto. Saber en qué zona estás cambia completamente la decisión de cada golpe.  
