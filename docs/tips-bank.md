@@ -59,7 +59,7 @@ Fuentes: ITF Coaching & Sport Science Review · Tennis Australia · USTA · Mour
 
 ---
 
-### 007 — La red está de vuelta `[LIBRE]`
+### 007 — La red está de vuelta `[USADO]`
 **Categoría:** Táctica  
 **Título:** La red volvió — y cambia el juego  
 **Cuerpo:** En el tenis moderno, las subidas a la red aumentaron un 30% en el circuito profesional entre 2020 y 2026. La razón: sorprender a un baseline poderoso con una aproximación bien ejecutada sigue siendo devastadoramente efectivo. Introducí en tus clases situaciones de approach + volea con marcador real. El jugador que aprende cuándo y cómo subir tiene una herramienta táctica que la mayoría de sus rivales no tiene.  

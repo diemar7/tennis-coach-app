@@ -48,6 +48,13 @@ export const TIPS: Tip[] = [
     cuerpo:
       'Enseñá a tus alumnos que la cancha tiene tres zonas con lógicas diferentes. Zona defensiva (más de 2 metros atrás de la línea de base): pelota alta, con margen, tiempo para recuperar. Zona neutral (cerca de la línea de base): pelota profunda, mantener el intercambio. Zona de ataque (dentro de la línea): pelota baja sobre la red, finalizá el punto. Saber en qué zona estás cambia completamente la decisión de cada golpe.',
   },
+  {
+    id: 7,
+    categoria: 'Táctica',
+    titulo: 'La red volvió — y cambia el juego',
+    cuerpo:
+      'En el tenis moderno, las subidas a la red aumentaron un 30% en el circuito profesional entre 2020 y 2026. La razón: sorprender a un baseline poderoso con una aproximación bien ejecutada sigue siendo devastadoramente efectivo. Introducí en tus clases situaciones de approach + volea con marcador real. El jugador que aprende cuándo y cómo subir tiene una herramienta táctica que la mayoría de sus rivales no tiene.',
+  },
 ]
 
 export function getTipDelDia(): Tip {
