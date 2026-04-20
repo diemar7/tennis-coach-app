@@ -67,7 +67,7 @@ Fuentes: ITF Coaching & Sport Science Review · Tennis Australia · USTA · Mour
 
 ---
 
-### 008 — Servicio como arma táctica `[LIBRE]`
+### 008 — Servicio como arma táctica `[USADO]`
 **Categoría:** Táctica  
 **Título:** El saque como primera táctica, no como trámite  
 **Cuerpo:** Muchos coaches trabajan el saque como un gesto técnico aislado. El enfoque moderno es entrenarlo como la primera decisión táctica del punto: ¿a dónde saco para abrir la cancha en el segundo golpe? Trabajá con tus alumnos combinaciones saque-golpe siguiente: saque al cuerpo + drive paralelo, saque al T + revés cruzado. El punto empieza en el saque, no después de él.  

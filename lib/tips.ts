@@ -55,6 +55,13 @@ export const TIPS: Tip[] = [
     cuerpo:
       'En el tenis moderno, las subidas a la red aumentaron un 30% en el circuito profesional entre 2020 y 2026. La razón: sorprender a un baseline poderoso con una aproximación bien ejecutada sigue siendo devastadoramente efectivo. Introducí en tus clases situaciones de approach + volea con marcador real. El jugador que aprende cuándo y cómo subir tiene una herramienta táctica que la mayoría de sus rivales no tiene.',
   },
+  {
+    id: 8,
+    categoria: 'Táctica',
+    titulo: 'El saque como primera táctica, no como trámite',
+    cuerpo:
+      'Muchos coaches trabajan el saque como un gesto técnico aislado. El enfoque moderno es entrenarlo como la primera decisión táctica del punto: ¿a dónde saco para abrir la cancha en el segundo golpe? Trabajá con tus alumnos combinaciones saque-golpe siguiente: saque al cuerpo + drive paralelo, saque al T + revés cruzado. El punto empieza en el saque, no después de él.',
+  },
 ]
 
 export function getTipDelDia(): Tip {
