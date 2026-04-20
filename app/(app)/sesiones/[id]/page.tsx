@@ -3,7 +3,16 @@
 import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
-import { Sesion, RegistroAlumno, ComentarioRegistro, AsistenciaTipo, SesionEstado, Clase, Etapa } from '@/lib/types'
+import { Sesion, RegistroAlumno, ComentarioRegistro, AsistenciaTipo, SesionEstado, Clase, Etapa, TecnicaTipo } from '@/lib/types'
+
+const TECNICAS: { value: TecnicaTipo; label: string }[] = [
+  { value: 'drive', label: 'Drive' }, { value: 'reves', label: 'Revés' },
+  { value: 'saque', label: 'Saque' }, { value: 'volea', label: 'Volea' },
+  { value: 'smash', label: 'Smash' }, { value: 'globo', label: 'Globo' },
+  { value: 'slice', label: 'Slice' }, { value: 'drop', label: 'Drop' },
+  { value: 'fisico', label: 'Físico' }, { value: 'tactica', label: 'Táctica' },
+  { value: 'otro', label: 'Otro' },
+]
 
 type RegistroConAlumno = RegistroAlumno & {
   alumno: { id: string; nombre: string; apellido: string }
@@ -182,7 +191,7 @@ export default function DetalleSesionPage() {
   async function cambiarClase(claseId: string | null) {
     if (!sesion) return
     const supabase = createClient()
-    await supabase.from('sesiones').update({ clase_id: claseId }).eq('id', sesion.id)
+    await supabase.from('sesiones').update({ clase_id: claseId, tecnica: claseId ? null : sesion.tecnica }).eq('id', sesion.id)
     // Recargar para traer la clase completa
     const { data: s } = await supabase
       .from('sesiones')
@@ -203,6 +212,13 @@ export default function DetalleSesionPage() {
     } else {
       setEtapasClase([])
     }
+  }
+
+  async function cambiarTecnica(tecnica: TecnicaTipo | null) {
+    if (!sesion) return
+    const supabase = createClient()
+    await supabase.from('sesiones').update({ tecnica }).eq('id', sesion.id)
+    setSesion(prev => prev ? { ...prev, tecnica } : prev)
   }
 
   if (loading) return <div className="px-4 pt-6"><p style={{ color: 'var(--color-text-muted)', fontSize: 14 }}>Cargando...</p></div>
@@ -394,6 +410,24 @@ export default function DetalleSesionPage() {
                 </span>
               </button>
             ))}
+          </div>
+        )}
+
+        {/* Técnica — solo si no hay clase asignada */}
+        {!sesion.clase_id && (
+          <div>
+            <p className="label-section">Técnica</p>
+            <select
+              className="input"
+              value={sesion.tecnica ?? ''}
+              onChange={e => cambiarTecnica(e.target.value ? e.target.value as TecnicaTipo : null)}
+              style={{ fontSize: 13, marginTop: 4 }}
+            >
+              <option value="">Sin técnica</option>
+              {TECNICAS.map(t => (
+                <option key={t.value} value={t.value}>{t.label}</option>
+              ))}
+            </select>
           </div>
         )}
       </div>

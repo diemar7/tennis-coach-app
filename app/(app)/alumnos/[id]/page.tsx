@@ -64,6 +64,7 @@ interface RegistroHistorial {
     fecha: string
     hora: string | null
     estado: SesionEstado
+    tecnica: TecnicaTipo | null
     grupo: { nombre: string }
     clase: { titulo: string; tecnica: TecnicaTipo | null } | null
   }
@@ -98,7 +99,7 @@ export default function FichaAlumnoPage() {
           .from('registros_alumno')
           .select(`
             id, asistencia, nota,
-            sesion:sesiones(id, fecha, hora, estado, grupo:grupos(nombre), clase:clases(titulo, tecnica)),
+            sesion:sesiones(id, fecha, hora, estado, tecnica, grupo:grupos(nombre), clase:clases(titulo, tecnica)),
             comentarios:comentarios_registro(id, texto, created_at)
           `)
           .eq('alumno_id', params.id)
@@ -169,7 +170,7 @@ export default function FichaAlumnoPage() {
   }
 
   const historialFiltrado = filtroTecnica
-    ? historial.filter(r => r.sesion.clase?.tecnica === filtroTecnica)
+    ? historial.filter(r => (r.sesion.clase?.tecnica ?? r.sesion.tecnica) === filtroTecnica)
     : historial
 
   const notasConValor = historialFiltrado.filter(r => r.nota !== null && r.asistencia === 'presente')
@@ -179,14 +180,14 @@ export default function FichaAlumnoPage() {
 
   // Técnicas que aparecen en el historial del alumno
   const tecnicasUsadas = Array.from(
-    new Set(historial.map(r => r.sesion.clase?.tecnica).filter(Boolean) as TecnicaTipo[])
+    new Set(historial.map(r => (r.sesion.clase?.tecnica ?? r.sesion.tecnica)).filter(Boolean) as TecnicaTipo[])
   )
 
   // Promedio por técnica (solo cuando no hay filtro activo)
   const promediosPorTecnica: { tecnica: TecnicaTipo; promedio: number; cantidad: number }[] = tecnicasUsadas
     .map(tecnica => {
       const regs = historial.filter(r =>
-        r.sesion.clase?.tecnica === tecnica && r.nota !== null && r.asistencia === 'presente'
+        (r.sesion.clase?.tecnica ?? r.sesion.tecnica) === tecnica && r.nota !== null && r.asistencia === 'presente'
       )
       if (regs.length === 0) return null
       const prom = regs.reduce((acc, r) => acc + r.nota!, 0) / regs.length
@@ -355,9 +356,9 @@ export default function FichaAlumnoPage() {
                               {s.grupo.nombre}
                               {s.clase && ` · ${s.clase.titulo}`}
                             </div>
-                            {s.clase?.tecnica && (
+                            {(s.clase?.tecnica ?? s.tecnica) && (
                               <span className="badge-tecnica" style={{ alignSelf: 'flex-start', marginTop: 2 }}>
-                                {TECNICA_LABEL[s.clase.tecnica]}
+                                {TECNICA_LABEL[(s.clase?.tecnica ?? s.tecnica)!]}
                               </span>
                             )}
                           </div>

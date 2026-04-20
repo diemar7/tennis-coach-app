@@ -3,7 +3,13 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
-import { Sesion, SesionEstado } from '@/lib/types'
+import { Sesion, SesionEstado, TecnicaTipo } from '@/lib/types'
+
+const TECNICA_LABEL: Record<TecnicaTipo, string> = {
+  drive: 'Drive', reves: 'Revés', saque: 'Saque', volea: 'Volea',
+  smash: 'Smash', globo: 'Globo', slice: 'Slice', drop: 'Drop',
+  fisico: 'Físico', tactica: 'Táctica', otro: 'Otro',
+}
 
 type SesionConRels = Sesion & {
   grupo: { nombre: string }
@@ -250,6 +256,11 @@ export default function SesionesPage() {
                             <p style={{ fontSize: 12, color: 'var(--color-text-secondary)' }} className="truncate">
                               {s.clase.titulo}
                             </p>
+                          )}
+                          {(s.clase?.tecnica ?? s.tecnica) && (
+                            <span className="badge-tecnica" style={{ alignSelf: 'flex-start' }}>
+                              {TECNICA_LABEL[(s.clase?.tecnica ?? s.tecnica) as TecnicaTipo]}
+                            </span>
                           )}
                         </div>
                         <div className="flex items-center gap-2 shrink-0">

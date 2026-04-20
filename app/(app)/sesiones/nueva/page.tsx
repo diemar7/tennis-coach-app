@@ -3,7 +3,16 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase'
-import { Grupo, Clase } from '@/lib/types'
+import { Grupo, Clase, TecnicaTipo } from '@/lib/types'
+
+const TECNICAS: { value: TecnicaTipo; label: string }[] = [
+  { value: 'drive', label: 'Drive' }, { value: 'reves', label: 'Revés' },
+  { value: 'saque', label: 'Saque' }, { value: 'volea', label: 'Volea' },
+  { value: 'smash', label: 'Smash' }, { value: 'globo', label: 'Globo' },
+  { value: 'slice', label: 'Slice' }, { value: 'drop', label: 'Drop' },
+  { value: 'fisico', label: 'Físico' }, { value: 'tactica', label: 'Táctica' },
+  { value: 'otro', label: 'Otro' },
+]
 
 export default function NuevaSesionPage() {
   const router = useRouter()
@@ -14,6 +23,7 @@ export default function NuevaSesionPage() {
   const [fecha, setFecha] = useState(() => new Date().toISOString().slice(0, 10))
   const [hora, setHora] = useState('')
   const [loading, setLoading] = useState(true)
+  const [tecnica, setTecnica] = useState<TecnicaTipo | ''>('')
   const [guardando, setGuardando] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -53,6 +63,7 @@ export default function NuevaSesionPage() {
         fecha,
         hora: hora || null,
         estado: 'pendiente',
+        tecnica: !claseId && tecnica ? tecnica : null,
       })
       .select()
       .single()
@@ -162,7 +173,7 @@ export default function NuevaSesionPage() {
                 <button
                   key={c.id}
                   type="button"
-                  onClick={() => setClaseId(claseId === c.id ? '' : c.id)}
+                  onClick={() => { setClaseId(claseId === c.id ? '' : c.id); if (claseId !== c.id) setTecnica('') }}
                   className="card text-left"
                   style={{
                     borderColor: claseId === c.id ? 'var(--color-accent)' : 'var(--color-border)',
@@ -182,6 +193,23 @@ export default function NuevaSesionPage() {
             </div>
           )}
         </div>
+
+        {!claseId && (
+          <div className="flex flex-col gap-1">
+            <label className="label-section">Técnica <span style={{ color: 'var(--color-text-muted)', textTransform: 'none', fontSize: 11 }}>(opcional)</span></label>
+            <select
+              className="input"
+              value={tecnica}
+              onChange={e => setTecnica(e.target.value as TecnicaTipo | '')}
+              style={{ fontSize: 14 }}
+            >
+              <option value="">Sin técnica</option>
+              {TECNICAS.map(t => (
+                <option key={t.value} value={t.value}>{t.label}</option>
+              ))}
+            </select>
+          </div>
+        )}
 
         {error && (
           <p style={{ fontSize: 13, color: '#c0392b', textAlign: 'center' }}>{error}</p>

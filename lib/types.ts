@@ -68,6 +68,7 @@ export interface Sesion {
   fecha: string
   hora: string | null
   estado: SesionEstado
+  tecnica: TecnicaTipo | null
   notas: string | null
   created_at: string
   grupo?: Grupo

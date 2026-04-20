@@ -22,6 +22,7 @@ interface SesionHistorial {
   fecha: string
   hora: string | null
   estado: SesionEstado
+  tecnica: TecnicaTipo | null
   clase: { titulo: string; tecnica: TecnicaTipo | null } | null
 }
 
@@ -52,7 +53,7 @@ export default function DetalleGrupoPage() {
         supabase.from('alumnos').select('*').eq('activo', true).order('apellido'),
         supabase
           .from('sesiones')
-          .select('id, fecha, hora, estado, clase:clases(titulo, tecnica)')
+          .select('id, fecha, hora, estado, tecnica, clase:clases(titulo, tecnica)')
           .eq('grupo_id', params.id)
           .order('fecha', { ascending: false }),
       ])
@@ -115,11 +116,11 @@ export default function DetalleGrupoPage() {
   }
 
   const sesionesFiltradas = filtroTecnica
-    ? sesiones.filter(s => s.clase?.tecnica === filtroTecnica)
+    ? sesiones.filter(s => (s.clase?.tecnica ?? s.tecnica) === filtroTecnica)
     : sesiones
 
   const tecnicasUsadas = Array.from(
-    new Set(sesiones.map(s => s.clase?.tecnica).filter(Boolean) as TecnicaTipo[])
+    new Set(sesiones.map(s => s.clase?.tecnica ?? s.tecnica).filter(Boolean) as TecnicaTipo[])
   )
 
   if (loading) return <div className="px-4 pt-6"><p style={{ color: 'var(--color-text-muted)', fontSize: 14 }}>Cargando...</p></div>
@@ -235,9 +236,9 @@ export default function DetalleGrupoPage() {
                               {s.clase.titulo}
                             </div>
                           )}
-                          {s.clase?.tecnica && (
+                          {(s.clase?.tecnica ?? s.tecnica) && (
                             <span className="badge-tecnica" style={{ alignSelf: 'flex-start', marginTop: 2 }}>
-                              {TECNICA_LABEL[s.clase.tecnica]}
+                              {TECNICA_LABEL[(s.clase?.tecnica ?? s.tecnica)!]}
                             </span>
                           )}
                         </div>
