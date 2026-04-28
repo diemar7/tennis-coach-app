@@ -62,6 +62,13 @@ export const TIPS: Tip[] = [
     cuerpo:
       'Muchos coaches trabajan el saque como un gesto técnico aislado. El enfoque moderno es entrenarlo como la primera decisión táctica del punto: ¿a dónde saco para abrir la cancha en el segundo golpe? Trabajá con tus alumnos combinaciones saque-golpe siguiente: saque al cuerpo + drive paralelo, saque al T + revés cruzado. El punto empieza en el saque, no después de él.',
   },
+  {
+    id: 9,
+    categoria: 'Mental',
+    titulo: 'La rutina entre puntos es más importante que el golpe',
+    cuerpo:
+      'Los 20 segundos entre punto y punto son el momento más importante del partido para la gestión mental. Enseñá a tus alumnos una rutina fija: soltar la tensión con una exhalación, mirar las cuerdas o el suelo, decidir el próximo plan, volver al juego con energía positiva. Los jugadores que tienen una rutina sólida entre puntos cometen menos errores no forzados en los momentos clave. Es entrenable como cualquier golpe.',
+  },
 ]
 
 export function getTipDelDia(): Tip {

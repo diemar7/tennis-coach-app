@@ -77,7 +77,7 @@ Fuentes: ITF Coaching & Sport Science Review · Tennis Australia · USTA · Mour
 
 ## MENTAL
 
-### 009 — La rutina entre puntos `[LIBRE]`
+### 009 — La rutina entre puntos `[USADO]`
 **Categoría:** Mental  
 **Título:** La rutina entre puntos es más importante que el golpe  
 **Cuerpo:** Los 20 segundos entre punto y punto son el momento más importante del partido para la gestión mental. Enseñá a tus alumnos una rutina fija: soltar la tensión con una exhalación, mirar las cuerdas o el suelo, decidir el próximo plan, volver al juego con energía positiva. Los jugadores que tienen una rutina sólida entre puntos cometen menos errores no forzados en los momentos clave. Es entrenable como cualquier golpe.  
